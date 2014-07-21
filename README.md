@@ -7,7 +7,7 @@ Usage
 =========
 
 1. Install the formatter
-
+ 
     public static void ConfigureApis(HttpConfiguration config)
     {
         config.Formatters.Add(new JsonPatchFormatter());
