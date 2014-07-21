@@ -7,23 +7,8 @@ Usage
 =========
 
 1. Install the formatter
- 
-    public static void ConfigureApis(HttpConfiguration config)
-    {
-        config.Formatters.Add(new JsonPatchFormatter());
-    }
 
-2. Profit??
 
-    public void Patch(Guid id, JsonPatchDocument<SomeDto> patchData)
-    {
-        //Remember to do some validation and all that fun stuff
-        
-        var objectToUpdate = repository.GetById(id);
-        patchData.ApplyUpdatesTo(objectToUpdate);
-        repository.Save(objectToUpdate);
-    }
-    
 Notes
 =========
 
