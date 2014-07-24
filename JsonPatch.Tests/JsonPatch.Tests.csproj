@@ -55,6 +55,7 @@
     <Compile Include="Entitys\SimpleEntity.cs" />
     <Compile Include="JsonPatchDocumentTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PathHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\JsonPatch.csproj">

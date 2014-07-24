@@ -10,7 +10,13 @@ namespace JsonPatch.Helpers
     {
         public static bool IsPathValid(Type entityType, string path)
         {
+            if (String.IsNullOrEmpty(path))
+                return false;
+
             string[] pathComponents = path.Trim('/').Split('/');
+
+            if (String.IsNullOrEmpty(pathComponents[0]) || pathComponents[0].IsPositiveInteger())
+                return false;
 
             var currentPathComponent = pathComponents[0];
 
