@@ -8,6 +8,7 @@ namespace JsonPatch.Tests
     [TestClass]
     public class PathHelperTests
     {
+        //IsPathValid
 
         #region Invalid Path Names
 
@@ -148,6 +149,98 @@ namespace JsonPatch.Tests
             //assert
             Assert.IsTrue(isValid);
         }
+
+        #endregion
+
+        //SetValueFromPath
+
+        #region Operations on simple paths
+
+        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        public void SetValueFromPath_InvalidPath_ThrowsJsonPatchException()
+        {
+            //act
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "", new SimpleEntity { }, null, JsonPatchOperationType.add);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_SimplePathAddValueToNull_UpdatesValue()
+        {
+            //arrange
+            var entity = new SimpleEntity { };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.add);
+
+            //assert
+            Assert.AreEqual("New Value", entity.Foo);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        public void SetValueFromPath_SimplePathAddValueToNonNull_ThrowsJsonPatchException()
+        {
+            //arrange
+            var entity = new SimpleEntity { Foo = "Existing Value" };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.add);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_SimplePathReplaceValueFromNull_UpdatesValue()
+        {
+            //arrange
+            var entity = new SimpleEntity { };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.replace);
+
+            //assert
+            Assert.AreEqual("New Value", entity.Foo);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_SimplePathReplaceValueFromNonNull_UpdatesValue()
+        {
+            //arrange
+            var entity = new SimpleEntity { Foo = "Existing Value" };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.replace);
+            
+            //assert
+            Assert.AreEqual("New Value", entity.Foo);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_SimplePathRemoveValueFromNull_ValueIsNull()
+        {
+            //arrange
+            var entity = new SimpleEntity { };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, null, JsonPatchOperationType.remove);
+
+            //assert
+            Assert.AreEqual(null, entity.Foo);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_SimplePathReplaceValueFromNonNull_ValueIsNull()
+        {
+            //arrange
+            var entity = new SimpleEntity { Foo = "Existing Value" };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, null, JsonPatchOperationType.remove);
+
+            //assert
+            Assert.AreEqual(null, entity.Foo);
+        }
+
+        #endregion
+
+        #region operations on array indexes
 
         #endregion
     }

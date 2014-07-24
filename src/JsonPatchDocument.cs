@@ -66,15 +66,15 @@ namespace JsonPatch
             {
                 if (operation.Operation == JsonPatchOperationType.remove)
                 {
-                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, null);
+                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, null, JsonPatchOperationType.remove);
                 }
                 else if (operation.Operation == JsonPatchOperationType.replace)
                 {
-                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, operation.Value);
+                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, operation.Value, JsonPatchOperationType.replace);
                 }
                 else if (operation.Operation == JsonPatchOperationType.add)
                 {
-                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, operation.Value);
+                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, operation.Value, JsonPatchOperationType.add);
                 }
             }
         }

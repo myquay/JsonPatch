@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Copy of JsonPatchParseException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Formatting\JsonPatchFormatter.cs" />
     <Compile Include="Helpers\PathHelper.cs" />

@@ -52,15 +52,22 @@ namespace JsonPatch.Helpers
             }
         }
 
-        public static void SetValueFromPath(Type entityType, string path, object entity, string value)
+        public static void SetValueFromPath(Type entityType, string path, object entity, string value, JsonPatchOperationType operationType)
         {
-            string[] properties = path.Trim('/').Split('/');
+            if (!IsPathValid(entityType, path))
+                throw new JsonPatchException(String.Format("The path specified ('{0}') is invalid", path));
 
-            if (entityType.GetProperties().Any(p => p.Name == properties[0]))
+            string[] pathComponents = path.Trim('/').Split('/');
+
+            if (entityType.GetProperties().Any(p => p.Name == pathComponents[0]))
             {
-                var property = entityType.GetProperties().Single(p => p.Name == properties[0]);
+                var property = entityType.GetProperties().Single(p => p.Name == pathComponents[0]);
 
-                if (properties.Length == 1){
+                if (pathComponents.Length == 1)
+                {
+                    if (operationType == JsonPatchOperationType.add && property.GetValue(entity) != null)
+                        throw new JsonPatchException("You are trying to perform an add operation on a property that already has a value.");
+
                     property.SetValue(entity, value);
                     return;
                 }
@@ -70,7 +77,7 @@ namespace JsonPatch.Helpers
                     property.SetValue(entity, Activator.CreateInstance(property.PropertyType));
                 }
 
-                SetValueFromPath(property.PropertyType, String.Join("/", properties.Skip(1)), property.GetValue(entity), value);
+                SetValueFromPath(property.PropertyType, String.Join("/", pathComponents.Skip(1)), property.GetValue(entity), value, operationType);
             }
         }
     }
