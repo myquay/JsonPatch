@@ -8,8 +8,8 @@ namespace JsonPatch
 {
     public interface IJsonPatchDocument
     {
-        void Add(string path, object value);
-        void Replace(string path, object value);
+        void Add(string path, String value);
+        void Replace(string path, String value);
         void Remove(string path);
     }
 }
