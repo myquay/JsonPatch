@@ -58,7 +58,7 @@
     <Compile Include="PathHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\JsonPatch.csproj">
+    <ProjectReference Include="..\JsonPatch\JsonPatch.csproj">
       <Project>{e602a320-c4bc-4db8-8351-0c9dc6a4463c}</Project>
       <Name>JsonPatch</Name>
     </ProjectReference>
