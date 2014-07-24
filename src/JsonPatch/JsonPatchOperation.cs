@@ -10,6 +10,6 @@ namespace JsonPatch
     {
         public JsonPatchOperationType Operation { get; set; }
         public String PropertyName { get; set; }
-        public String Value { get; set; }
+        public object Value { get; set; }
     }
 }

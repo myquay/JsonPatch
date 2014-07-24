@@ -15,7 +15,7 @@ namespace JsonPatch
 
         public List<JsonPatchOperation> Operations { get { return _operations; } }
 
-        public void Add(string path, String value)
+        public void Add(string path, object value)
         {
             if (!PathHelper.IsPathValid(typeof(TEntity), path))
             {
@@ -30,7 +30,7 @@ namespace JsonPatch
             });
         }
 
-        public void Replace(string path, String value)
+        public void Replace(string path, object value)
         {
             if (!PathHelper.IsPathValid(typeof(TEntity), path))
             {

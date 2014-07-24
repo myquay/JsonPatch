@@ -61,7 +61,7 @@ namespace JsonPatch.Formatting
                     }
                     else if (operation.op == Constants.Operations.REPLACE)
                     {
-                        jsonPatchDocument.Replace(operation.path, operation.value);
+                        jsonPatchDocument.Replace(operation.path,  operation.value);
                     }
                     else
                     {

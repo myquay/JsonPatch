@@ -160,7 +160,7 @@ namespace JsonPatch.Tests
         public void SetValueFromPath_InvalidPath_ThrowsJsonPatchException()
         {
             //act
-            PathHelper.SetValueFromPath(typeof(SimpleEntity), "", new SimpleEntity { }, null, JsonPatchOperationType.add);
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "",  new SimpleEntity { }, null, JsonPatchOperationType.add);
         }
 
         [TestMethod]
@@ -242,6 +242,183 @@ namespace JsonPatch.Tests
 
         #region operations on array indexes
 
+        [TestMethod]
+        public void SetValueFromPath_ReplaceArrayValue_UpdatesValue()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
+
+            //Assert
+            Assert.AreEqual("Element Two Updated", entity.Foo[1]);
+            Assert.AreEqual(2, entity.Foo.Length);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        public void SetValueFromPath_ReplaceIndexOutOfBounds_ThrowsJsonPatchException()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_AddArrayValue_AddsValue()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.add);
+
+            //Assert
+            Assert.AreEqual("Element Two Updated", entity.Foo[1]);
+            Assert.AreEqual("Element Two", entity.Foo[2]);
+            Assert.AreEqual(3, entity.Foo.Length);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_AddArrayValueAtEnd_AddsValue()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.add);
+
+            //Assert
+            Assert.AreEqual("Element Two Updated", entity.Foo[2]);
+            Assert.AreEqual("Element Two", entity.Foo[1]);
+            Assert.AreEqual(3, entity.Foo.Length);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        public void SetValueFromPath_AddIndexOutOfBounds_ThrowsJsonPatchException()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/3", entity, "Element Two Updated", JsonPatchOperationType.add);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_RemoveArrayValueFromStart_RemovesValue()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/0", entity, null, JsonPatchOperationType.remove);
+
+            //Assert
+            Assert.AreEqual("Element Two", entity.Foo[0]);
+            Assert.AreEqual(1, entity.Foo.Length);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_RemoveArrayValueFromEnd_RemovesValue()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, null, JsonPatchOperationType.remove);
+
+            //Assert
+            Assert.AreEqual("Element One", entity.Foo[0]);
+            Assert.AreEqual(1, entity.Foo.Length);
+        }
+
+
+        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        public void SetValueFromPath_RemoveIndexOutOfBounds_ThrowsJsonPatchException()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, null, JsonPatchOperationType.remove);
+        }
+
+        #endregion
+
+        #region Operations on complex paths
+
+        [TestMethod]
+        public void SetValueFromPath_SetArrayAddValueToNull_AddsValue()
+        {
+            //arrange
+            var entity = new ComplexEntity { };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Foo/Foo", entity, new[]{"Element One", "Element Two"}, JsonPatchOperationType.add);
+
+            //assert
+            Assert.IsNotNull(entity.Foo);
+            Assert.IsNotNull(entity.Foo.Foo);
+            Assert.AreEqual(2, entity.Foo.Foo.Length);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_AddToEmptyArray_CreatesArrayAndAddsValue()
+        {
+            //arrange
+            var entity = new ComplexEntity { };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Foo/Foo/0", entity, "Element One", JsonPatchOperationType.add);
+
+            //assert
+            Assert.IsNotNull(entity.Foo);
+            Assert.IsNotNull(entity.Foo.Foo);
+            Assert.AreEqual(1, entity.Foo.Foo.Length);
+            Assert.AreEqual("Element One", entity.Foo.Foo[0]);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_NestedAddToEmptyArray_CreatesArrayAndAddsValue()
+        {
+            //arrange
+            var entity = new ComplexEntity
+            {
+                Baz = new SimpleEntity[] { new SimpleEntity{ Foo = "Foo" } }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Baz/0/Foo", entity, "New Value", JsonPatchOperationType.replace);
+
+            //assert
+            Assert.AreEqual("New Value", entity.Baz[0].Foo);
+        }
         #endregion
     }
 }
