@@ -8,10 +8,11 @@ namespace JsonPatch.Tests
     [TestClass]
     public class JsonPatchDocumentTests
     {
+
         #region JsonPatch Add Tests
 
         [TestMethod]
-        public void Add_ValidPath_OperationSuccessfullyAdded()
+        public void Add_ValidPath_OperationAdded()
         {
             //Arrange
             var patchDocument = new JsonPatchDocument<SimpleEntity>();
@@ -39,7 +40,7 @@ namespace JsonPatch.Tests
         #region JsonPatch Remove Tests
 
         [TestMethod]
-        public void Remove_ValidPath_OperationSuccessfullyAdded()
+        public void Remove_ValidPath_OperationAdded()
         {
             //Arrange
             var patchDocument = new JsonPatchDocument<SimpleEntity>();
@@ -67,7 +68,7 @@ namespace JsonPatch.Tests
         #region JsonPatch Replace Tests
 
         [TestMethod]
-        public void Replace_ValidPath_OperationSuccessfullyAdded()
+        public void Replace_ValidPath_OperationAdded()
         {
             //Arrange
             var patchDocument = new JsonPatchDocument<SimpleEntity>();
@@ -91,6 +92,55 @@ namespace JsonPatch.Tests
         }
 
         #endregion
-        
+
+        #region JsonPatch ApplyUpdatesTo Tests
+
+        [TestMethod]
+        public void ApplyUpdate_AddOperation_EntityUpdated()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+            var entity = new SimpleEntity();
+
+            //Act
+            patchDocument.Add("Foo", "bar");
+            patchDocument.ApplyUpdatesTo(entity);
+
+            //Assert
+            Assert.AreEqual("bar", entity.Foo);
+        }
+
+        [TestMethod]
+        public void ApplyUpdate_RemoveOperation_EntityUpdated()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+            var entity = new SimpleEntity { Foo = "bar" };
+
+            //Act
+            patchDocument.Remove("Foo");
+            patchDocument.ApplyUpdatesTo(entity);
+
+            //Assert
+            Assert.AreEqual(null, entity.Foo);
+        }
+
+        [TestMethod]
+        public void ApplyUpdate_ReplaceOperation_EntityUpdated()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+            var entity = new SimpleEntity { Foo = "bar" };
+
+            //Act
+            patchDocument.Replace("Foo", "baz");
+            patchDocument.ApplyUpdatesTo(entity);
+
+            //Assert
+            Assert.AreEqual("baz", entity.Foo);
+        } 
+
+        #endregion
+
     }
 }

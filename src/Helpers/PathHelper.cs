@@ -54,8 +54,10 @@ namespace JsonPatch.Helpers
             {
                 var property = entityType.GetProperties().Single(p => p.Name == properties[0]);
 
-                if (properties.Length == 1)
+                if (properties.Length == 1){
                     property.SetValue(entity, value);
+                    return;
+                }
 
                 if (property.GetValue(entity) == null)
                 {
