@@ -33,7 +33,7 @@ Notes
 
 Because we are applying updates to C# objects rather than JSON objects we differ from the spec slightly, here are some points of difference.
 
-### JSON Pointer [(rfc6901)](http://tools.ietf.org/html/rfc4627)
+### JSON Pointer [(rfc6901)](http://tools.ietf.org/html/rfc6901)
 
 The JSON patch document uses JSON pointers to refer to properties, we don't accept paths in the following formats:
 
