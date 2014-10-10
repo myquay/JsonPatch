@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using JsonPatch.Helpers;
 using JsonPatch.Tests.Entitys;
+using System.Collections.Generic;
 
 namespace JsonPatch.Tests
 {
@@ -139,6 +140,16 @@ namespace JsonPatch.Tests
             //assert
             Assert.IsTrue(isValid);
         }
+
+		[TestMethod]
+		public void IsPathValid_ChildPathOnList_ReturnsTrue()
+		{
+			//act
+			var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Qux/1/Foo");
+
+			//assert
+			Assert.IsTrue(isValid);
+		}
 
         [TestMethod]
         public void IsPathValid_PathOnChildArray_ReturnsTrue()
@@ -419,6 +430,22 @@ namespace JsonPatch.Tests
             //assert
             Assert.AreEqual("New Value", entity.Baz[0].Foo);
         }
+
+		[TestMethod]
+		public void SetValueFromPath_NestedAddToEmptyList_CreatesListAndAddsValue()
+		{
+			//arrange
+			var entity = new ComplexEntity
+			{
+				Qux = new List<SimpleEntity> { new SimpleEntity { Foo = "Foo" } }
+			};
+
+			//act
+			PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, "New Value", JsonPatchOperationType.replace);
+
+			//assert
+			Assert.AreEqual("New Value", entity.Qux[0].Foo);
+		}
         #endregion
     }
 }
