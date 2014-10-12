@@ -111,7 +111,7 @@ namespace JsonPatch.Helpers
                     }
                     else
                     {
-						listEntity[accessIndex] = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), entityType.GetElementType());
+						listEntity[accessIndex] = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), entityType.GetElementType() ?? entityType.GetGenericArguments().First());
                         return entity;
                     }
                 }
