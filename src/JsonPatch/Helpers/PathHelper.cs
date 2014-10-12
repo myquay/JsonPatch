@@ -79,8 +79,15 @@ namespace JsonPatch.Helpers
                 {
                     if (operationType == JsonPatchOperationType.add)
                     {
+						//If this isn't an array, we can just insert it and return. 
+						if (listEntity is Array == false)
+						{
+							listEntity.Insert(accessIndex, JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), entityType.GetGenericArguments().First()));
+							return listEntity;
+						}
+
                         var oldArray = listEntity;
-                        var newArray = (IList)Activator.CreateInstance(entityType, new object[] { (oldArray).Count + 1 });
+						IList newArray = (IList)Activator.CreateInstance(entityType, new object[] { (oldArray).Count + 1 });
 
                         for (int i = 0; i < newArray.Count; i++)
                         {
@@ -96,6 +103,13 @@ namespace JsonPatch.Helpers
                     }
                     else if (operationType == JsonPatchOperationType.remove)
                     {
+						//If this isn't an array, we can just remove at and return. 
+						if (listEntity is Array == false)
+						{
+							listEntity.RemoveAt(accessIndex);
+							return listEntity;
+						}
+
 						var oldArray = listEntity;
 						var newArray = (IList)Activator.CreateInstance(entityType, new object[] { (oldArray).Count - 1 });
 
