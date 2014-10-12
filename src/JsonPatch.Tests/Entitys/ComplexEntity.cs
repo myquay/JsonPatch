@@ -10,5 +10,6 @@ namespace JsonPatch.Tests.Entitys
     {
         public ArrayEntity Foo { get; set; }
         public SimpleEntity[] Baz { get; set; }
+		public List<SimpleEntity> Qux { get; set; }
     }
 }
