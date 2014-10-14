@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace JsonPatch
 {
-    public class JsonPatchParseException : Exception
+    public class JsonPatchException : Exception
     {
-        public JsonPatchParseException(string message) : base(message) { }
+        public JsonPatchException(string message) : base(message) { }
     }
 }
