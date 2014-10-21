@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Entitys\ArrayEntity.cs" />
     <Compile Include="Entitys\ComplexEntity.cs" />
+    <Compile Include="Entitys\ListEntity.cs" />
     <Compile Include="Entitys\SimpleEntity.cs" />
     <Compile Include="JsonPatchDocumentTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

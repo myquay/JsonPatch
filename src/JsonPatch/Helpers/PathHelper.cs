@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,13 +24,13 @@ namespace JsonPatch.Helpers
 
             if (currentPathComponent.IsPositiveInteger())
             {
-                if(!entityType.IsArray)
+                if(!typeof(IEnumerable).IsAssignableFrom(entityType))
                     return false;
 
                 if (pathComponents.Length == 1)
                     return true;
 
-                return IsPathValid(entityType.GetElementType(), String.Join("/", pathComponents.Skip(1)));
+                return IsPathValid(entityType.GetElementType() ?? entityType.GetGenericArguments().First(), String.Join("/", pathComponents.Skip(1)));
             }
             else if (entityType.GetProperties().Any(p => p.Name == pathComponents[0]))
             {
@@ -56,7 +57,9 @@ namespace JsonPatch.Helpers
 
             if (currentPathComponent.IsPositiveInteger())
             {
-                var numberOfElements = ((Array)entity).Length;
+				//Cast it once to an iList to save CPU. 
+				var listEntity = (IList)entity;
+                var numberOfElements = (listEntity).Count;
                 var accessIndex = currentPathComponent.ToInt32();
 
                 if (operationType == JsonPatchOperationType.add && pathComponents.Length == 1)
@@ -76,45 +79,59 @@ namespace JsonPatch.Helpers
                 {
                     if (operationType == JsonPatchOperationType.add)
                     {
-                        var oldArray = ((Array)entity);
-                        var newArray = (Array)Activator.CreateInstance(entityType, new object[] { ((Array)oldArray).Length + 1 });
+						//If this isn't an array, we can just insert it and return. 
+						if (listEntity is Array == false)
+						{
+							listEntity.Insert(accessIndex, JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), entityType.GetGenericArguments().First()));
+							return listEntity;
+						}
 
-                        for (int i = 0; i < newArray.Length; i++)
+                        var oldArray = listEntity;
+						IList newArray = (IList)Activator.CreateInstance(entityType, new object[] { (oldArray).Count + 1 });
+
+                        for (int i = 0; i < newArray.Count; i++)
                         {
-                            if (i < accessIndex)
-                                newArray.SetValue(oldArray.GetValue(i), i);
+							if (i < accessIndex)
+								newArray[i] = oldArray[i];
                             if (i == accessIndex)
-                                newArray.SetValue(JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), entityType.GetElementType()), i);
-                            if (i > accessIndex)
-                                newArray.SetValue(oldArray.GetValue(i - 1), i);
+								newArray[i] = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), entityType.GetElementType());
+							if (i > accessIndex)
+								newArray[i] = oldArray[i - 1];
                         }
 
                         return newArray;
                     }
                     else if (operationType == JsonPatchOperationType.remove)
                     {
-                        var oldArray = ((Array)entity);
-                        var newArray = (Array)Activator.CreateInstance(entityType, new object[] { ((Array)oldArray).Length - 1 });
+						//If this isn't an array, we can just remove at and return. 
+						if (listEntity is Array == false)
+						{
+							listEntity.RemoveAt(accessIndex);
+							return listEntity;
+						}
 
-                        for (int i = 0; i < oldArray.Length; i++)
-                        {
-                            if (i < accessIndex)
-                                newArray.SetValue(oldArray.GetValue(i), i);
-                            if (i > accessIndex)
-                                newArray.SetValue(oldArray.GetValue(i), i - 1);
-                        }
+						var oldArray = listEntity;
+						var newArray = (IList)Activator.CreateInstance(entityType, new object[] { (oldArray).Count - 1 });
 
-                        return newArray;
+						for (int i = 0; i < oldArray.Count; i++)
+						{
+							if (i < accessIndex)
+								newArray[i] = oldArray[i];
+							if (i > accessIndex)
+								newArray[i - 1] = oldArray[i];
+						}
+
+						return newArray;
                     }
                     else
                     {
-                        ((Array)entity).SetValue(JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), entityType.GetElementType()), accessIndex);
+						listEntity[accessIndex] = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), entityType.GetElementType() ?? entityType.GetGenericArguments().First());
                         return entity;
                     }
                 }
 
-                var updatedEntity = SetValueFromPath(entityType.GetElementType(), String.Join("/", pathComponents.Skip(1)), ((Array)entity).GetValue(accessIndex), value, operationType);
-                ((Array)entity).SetValue(updatedEntity, accessIndex);
+				var updatedEntity = SetValueFromPath(entityType.GetElementType() ?? entityType.GetGenericArguments().First(), String.Join("/", pathComponents.Skip(1)), listEntity[accessIndex], value, operationType);
+				listEntity[accessIndex] = updatedEntity;
 
             }else if (entityType.GetProperties().Any(p => p.Name == pathComponents[0]))
             {
