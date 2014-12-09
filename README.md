@@ -3,6 +3,8 @@ JsonPatch
 
 JsonPatch is a simple library which adds JSON Patch support to ASP.NET Web API (http://tools.ietf.org/html/rfc6902).
 
+You can get it on NuGet here: https://www.nuget.org/packages/JsonPatch/
+
 Usage
 =========
 
@@ -27,6 +29,18 @@ public void Patch(Guid id, JsonPatchDocument<SomeDto> patchData)
     repository.Save(objectToUpdate);
 }
 ```
+
+##Making a PATCH request
+
+The main thing is to make sure the content type is "application/json-patch+json" otherwise Web API won't invoke the JsonPatch media formatter. Here's an example.
+
+    PATCH /my/data HTTP/1.1
+    Host: example.org
+    Content-Type: application/json-patch+json
+    
+    [
+        { "op": "add", "path": "/a/b/c", "value": "foo" }
+    ]
 
 Notes
 =========
