@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>JsonPatch</id>
+        <version>1.0.0</version>
+        <title>JsonPatch</title>
+        <authors>Michael McKenna</authors>
+        <owners>Michael McKenna</owners>
+        <licenseUrl>https://github.com/myquay/JsonPatch/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/myquay/JsonPatch</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>JsonPatch is a simple library which adds JSON Patch support to ASP.NET Web API</description>
+        <copyright>Copyright 2012-2014  Michael McKenna</copyright>
+        <dependencies>
+            <dependency id="Newtonsoft.Json" version="6.0.5" />
+            <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="JsonPatch\bin\Release\JsonPatch.dll" target="lib\net45\JsonPatch.dll" />
+    </files>
+</package>
