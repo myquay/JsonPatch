@@ -95,6 +95,19 @@ namespace JsonPatch.Tests
 
         #region JsonPatch ApplyUpdatesTo Tests
 
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ApplyUpdate_ThrowsException_IfEntityNull()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+            SimpleEntity entity = null;
+
+            //Act
+            patchDocument.Add("Foo", "bar");
+
+            patchDocument.ApplyUpdatesTo(entity);
+        }
+
         [TestMethod]
         public void ApplyUpdate_AddOperation_EntityUpdated()
         {
