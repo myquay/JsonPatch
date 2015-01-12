@@ -15,7 +15,7 @@ namespace JsonPatch.Helpers
             if (String.IsNullOrEmpty(path))
                 return false;
 
-            string[] pathComponents = path.Trim('/').Split('/');
+            string[] pathComponents = path.ToLowerInvariant().Trim('/').Split('/');
 
             if (String.IsNullOrEmpty(pathComponents[0]))
                 return false;
@@ -32,9 +32,11 @@ namespace JsonPatch.Helpers
 
                 return IsPathValid(entityType.GetElementType() ?? entityType.GetGenericArguments().First(), String.Join("/", pathComponents.Skip(1)));
             }
-            else if (entityType.GetProperties().Any(p => p.Name == pathComponents[0]))
+
+            var propertyInfos = entityType.GetProperties();
+            if (propertyInfos.Any(p => p.Name.ToLowerInvariant() == currentPathComponent))
             {
-                var property = entityType.GetProperties().Single(p => p.Name == pathComponents[0]);
+                var property = propertyInfos.Single(p => p.Name.ToLowerInvariant() == currentPathComponent);
                 if (pathComponents.Length == 1)
                     return true;
 
@@ -51,7 +53,7 @@ namespace JsonPatch.Helpers
             if (!IsPathValid(entityType, path))
                 throw new JsonPatchException(String.Format("The path specified ('{0}') is invalid", path));
 
-            string[] pathComponents = path.Trim('/').Split('/');
+            string[] pathComponents = path.ToLowerInvariant().Trim('/').Split('/');
 
             var currentPathComponent = pathComponents[0];
 
@@ -133,37 +135,41 @@ namespace JsonPatch.Helpers
 				var updatedEntity = SetValueFromPath(entityType.GetElementType() ?? entityType.GetGenericArguments().First(), String.Join("/", pathComponents.Skip(1)), listEntity[accessIndex], value, operationType);
 				listEntity[accessIndex] = updatedEntity;
 
-            }else if (entityType.GetProperties().Any(p => p.Name == pathComponents[0]))
+            }else
             {
-                var property = entityType.GetProperties().Single(p => p.Name == pathComponents[0]);
-
-                if (pathComponents.Length == 1)
+                var propertyInfos = entityType.GetProperties();
+                if (propertyInfos.Any(p => p.Name.ToLowerInvariant() == pathComponents[0]))
                 {
-                    if (operationType == JsonPatchOperationType.add && property.GetValue(entity) != null)
-                        throw new JsonPatchException("You are trying to perform an add operation on a property that already has a value.");
+                    var property = propertyInfos.Single(p => p.Name.ToLowerInvariant() == pathComponents[0]);
 
-                    property.SetValue(entity, JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), property.PropertyType));
-                    return entity;
-                }
-
-                //If we're still traversing the path, make sure we've instantiated objects along the way
-                var propertyValue = property.GetValue(entity);
-                var propertyType = property.PropertyType;
-
-                if (propertyValue == null)
-                {
-                    if (property.PropertyType.IsArray)
+                    if (pathComponents.Length == 1)
                     {
-                        propertyValue = Activator.CreateInstance(property.PropertyType, new object[] { 0 });
-                    }
-                    else
-                    {
-                        propertyValue = Activator.CreateInstance(property.PropertyType);
-                    }
-                }
+                        if (operationType == JsonPatchOperationType.add && property.GetValue(entity) != null)
+                            throw new JsonPatchException("You are trying to perform an add operation on a property that already has a value.");
 
-                propertyValue = SetValueFromPath(propertyType, String.Join("/", pathComponents.Skip(1)), propertyValue, value, operationType);
-                property.SetValue(entity, propertyValue);
+                        property.SetValue(entity, JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), property.PropertyType));
+                        return entity;
+                    }
+
+                    //If we're still traversing the path, make sure we've instantiated objects along the way
+                    var propertyValue = property.GetValue(entity);
+                    var propertyType = property.PropertyType;
+
+                    if (propertyValue == null)
+                    {
+                        if (property.PropertyType.IsArray)
+                        {
+                            propertyValue = Activator.CreateInstance(property.PropertyType, new object[] { 0 });
+                        }
+                        else
+                        {
+                            propertyValue = Activator.CreateInstance(property.PropertyType);
+                        }
+                    }
+
+                    propertyValue = SetValueFromPath(propertyType, String.Join("/", pathComponents.Skip(1)), propertyValue, value, operationType);
+                    property.SetValue(entity, propertyValue);
+                }
             }
 
             return entity;

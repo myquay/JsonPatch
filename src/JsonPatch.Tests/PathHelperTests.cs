@@ -112,10 +112,30 @@ namespace JsonPatch.Tests
         }
 
         [TestMethod]
+        public void IsPathValid_SimplePath_CaseInsensitive_ReturnsTrue()
+        {
+            //act
+            var isValid = PathHelper.IsPathValid(typeof(SimpleEntity), "/foo");
+
+            //assert
+            Assert.IsTrue(isValid);
+        }
+
+        [TestMethod]
         public void IsPathValid_ArrayPath_ReturnsTrue()
         {
             //act
             var isValid = PathHelper.IsPathValid(typeof(ArrayEntity), "/Foo/3");
+
+            //assert
+            Assert.IsTrue(isValid);
+        }
+
+        [TestMethod]
+        public void IsPathValid_ArrayPath_CaseInsensitive_ReturnsTrue()
+        {
+            //act
+            var isValid = PathHelper.IsPathValid(typeof(ArrayEntity), "/FOO/3");
 
             //assert
             Assert.IsTrue(isValid);
@@ -141,6 +161,16 @@ namespace JsonPatch.Tests
             Assert.IsTrue(isValid);
         }
 
+        [TestMethod]
+        public void IsPathValid_ChildPathOnArray_CaseInsensitive_ReturnsTrue()
+        {
+            //act
+            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/BaZ/1/FOO");
+
+            //assert
+            Assert.IsTrue(isValid);
+        }
+
 		[TestMethod]
 		public void IsPathValid_ChildPathOnList_ReturnsTrue()
 		{
@@ -152,10 +182,30 @@ namespace JsonPatch.Tests
 		}
 
         [TestMethod]
+        public void IsPathValid_ChildPathOnList_CaseInsensitive_ReturnsTrue()
+        {
+            //act
+            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/QUX/1/FOo");
+
+            //assert
+            Assert.IsTrue(isValid);
+        }
+
+        [TestMethod]
         public void IsPathValid_PathOnChildArray_ReturnsTrue()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Foo/Foo/1");
+            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/foo/FOo/1");
+
+            //assert
+            Assert.IsTrue(isValid);
+        }
+
+        [TestMethod]
+        public void IsPathValid_PathOnChildArray_CaseInsensitive_ReturnsTrue()
+        {
+            //act
+            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/FOO/foo/1");
 
             //assert
             Assert.IsTrue(isValid);
@@ -182,6 +232,19 @@ namespace JsonPatch.Tests
 
             //act
             PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.add);
+
+            //assert
+            Assert.AreEqual("New Value", entity.Foo);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_SimplePathAddValueToNull_CaseInsensitive_UpdatesValue()
+        {
+            //arrange
+            var entity = new SimpleEntity { };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/foo", entity, "New Value", JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual("New Value", entity.Foo);
@@ -264,6 +327,23 @@ namespace JsonPatch.Tests
 
             //act
             PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
+
+            //Assert
+            Assert.AreEqual("Element Two Updated", entity.Foo[1]);
+            Assert.AreEqual(2, entity.Foo.Length);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_ReplaceArrayValue_CaseInsensitive_UpdatesValue()
+        {
+            //Arrange
+            var entity = new ArrayEntity
+            {
+                Foo = new string[] { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/FOO/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
 
             //Assert
             Assert.AreEqual("Element Two Updated", entity.Foo[1]);
@@ -479,6 +559,21 @@ namespace JsonPatch.Tests
 
             //act
             PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Foo/Foo", entity, new[]{"Element One", "Element Two"}, JsonPatchOperationType.add);
+
+            //assert
+            Assert.IsNotNull(entity.Foo);
+            Assert.IsNotNull(entity.Foo.Foo);
+            Assert.AreEqual(2, entity.Foo.Foo.Length);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_SetArrayAddValueToNull_CaseInsensitive_AddsValue()
+        {
+            //arrange
+            var entity = new ComplexEntity { };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/FOO/foo", entity, new[] { "Element One", "Element Two" }, JsonPatchOperationType.add);
 
             //assert
             Assert.IsNotNull(entity.Foo);

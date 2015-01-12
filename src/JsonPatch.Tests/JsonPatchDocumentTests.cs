@@ -25,6 +25,19 @@ namespace JsonPatch.Tests
             Assert.AreEqual(JsonPatchOperationType.add, patchDocument.Operations.Single().Operation);
         }
 
+        [TestMethod]
+        public void Add_ValidPath_SetsHasOperations()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Act
+            patchDocument.Add("Foo", "bar");
+
+            //Assert
+            Assert.IsTrue(patchDocument.HasOperations);
+        }
+
         [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
         public void Add_InvalidPath_ThrowsJsonPatchParseException()
         {
@@ -51,6 +64,18 @@ namespace JsonPatch.Tests
             //Assert
             Assert.AreEqual(1, patchDocument.Operations.Count);
             Assert.AreEqual(JsonPatchOperationType.remove, patchDocument.Operations.Single().Operation);
+        }
+
+        public void Remove_ValidPath_SetsHasOperations()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Act
+            patchDocument.Remove("Foo");
+
+            //Assert
+            Assert.IsTrue(patchDocument.HasOperations);
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
@@ -81,6 +106,19 @@ namespace JsonPatch.Tests
             Assert.AreEqual(JsonPatchOperationType.replace, patchDocument.Operations.Single().Operation);
         }
 
+        [TestMethod]
+        public void Replace_ValidPath_SetsHasOperations()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Act
+            patchDocument.Replace("Foo", "bar");
+
+            //Assert
+            Assert.IsTrue(patchDocument.HasOperations);
+        }
+
         [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
         public void Replace_InvalidPath_ThrowsJsonPatchParseException()
         {
@@ -94,6 +132,19 @@ namespace JsonPatch.Tests
         #endregion
 
         #region JsonPatch ApplyUpdatesTo Tests
+
+        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        public void ApplyUpdate_ThrowsException_IfEntityNull()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+            SimpleEntity entity = null;
+
+            //Act
+            patchDocument.Add("Foo", "bar");
+
+            patchDocument.ApplyUpdatesTo(entity);
+        }
 
         [TestMethod]
         public void ApplyUpdate_AddOperation_EntityUpdated()
