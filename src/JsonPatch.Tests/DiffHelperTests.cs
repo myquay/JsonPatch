@@ -102,5 +102,52 @@ namespace JsonPatch.Tests
             Assert.AreEqual("/Foo/0", operations.First().PropertyName);
             Assert.AreEqual("baz", operations.First().Value);
         }
+
+        [TestMethod]
+        public void GenerateDiff_ListEntityAdd_ReturnsAddOperation()
+        {
+            ListEntity originalDocument = new ListEntity();
+            originalDocument.Foo = new List<string>() { "bar" };
+            ListEntity modifiedDocument = new ListEntity();
+            modifiedDocument.Foo = new List<string>() { "bar", "baz" };
+
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+
+            Assert.AreEqual(1, operations.Count);
+            Assert.AreEqual(JsonPatchOperationType.add, operations.First().Operation);
+            Assert.AreEqual("/Foo/1", operations.First().PropertyName);
+            Assert.AreEqual("baz", operations.First().Value);
+        }
+
+        [TestMethod]
+        public void GenerateDiff_ListEntityRemove_ReturnsRemoveOperation()
+        {
+            ListEntity originalDocument = new ListEntity();
+            originalDocument.Foo = new List<string>() { "bar" };
+            ListEntity modifiedDocument = new ListEntity();
+            modifiedDocument.Foo = new List<string>();
+
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+
+            Assert.AreEqual(1, operations.Count);
+            Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
+            Assert.AreEqual("/Foo/0", operations.First().PropertyName);
+        }
+
+        [TestMethod]
+        public void GenerateDiff_ListEntityModify_ReturnsReplaceOperation()
+        {
+            ListEntity originalDocument = new ListEntity();
+            originalDocument.Foo = new List<string>() { "bar" };
+            ListEntity modifiedDocument = new ListEntity();
+            modifiedDocument.Foo = new List<string>() { "baz" };
+
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+
+            Assert.AreEqual(1, operations.Count);
+            Assert.AreEqual(JsonPatchOperationType.replace, operations.First().Operation);
+            Assert.AreEqual("/Foo/0", operations.First().PropertyName);
+            Assert.AreEqual("baz", operations.First().Value);
+        }
     }
 }

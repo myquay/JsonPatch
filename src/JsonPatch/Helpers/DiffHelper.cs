@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,10 +35,10 @@ namespace JsonPatch.Helpers
                 var originalValue = property.GetValue(originalDocument);
                 var modifiedValue = property.GetValue(modifiedDocument);
 
-                if (property.PropertyType.IsArray)
+                if (property.PropertyType.IsArray || (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)))
                 {
-                    var originalArrayValue = originalValue as Array;
-                    var modifiedArrayValue = modifiedValue as Array;
+                    var originalArrayValue = property.PropertyType.IsArray ? originalValue as Array : ((IEnumerable)originalValue).Cast<object>().ToArray();
+                    var modifiedArrayValue = property.PropertyType.IsArray ? modifiedValue as Array : ((IEnumerable)modifiedValue).Cast<object>().ToArray();
 
                     //Array add/remove
                     foreach (var addRemoveDiff in ArrayAddRemoveDiff(originalArrayValue,  modifiedArrayValue, path + property.Name + "/"))
@@ -73,36 +74,29 @@ namespace JsonPatch.Helpers
 
         private static IEnumerable<JsonPatchOperation> ArrayAddRemoveDiff(Array originalArray, Array modifiedArray, string path)
         {
-            if (originalArray.Length > modifiedArray.Length)
+            var lengthDifference = Math.Abs(originalArray.Length - modifiedArray.Length);
+
+            var count = 0;
+            while (count < lengthDifference)
             {
-                var removeCount = originalArray.Length - modifiedArray.Length;
-                var count = 0;
-                while (count < removeCount)
+                if(originalArray.Length > modifiedArray.Length)
                 {
-                    yield return new JsonPatchOperation()
+                    yield return new JsonPatchOperation
                     {
                         Operation = JsonPatchOperationType.remove,
                         PropertyName = path + (originalArray.Length - 1 - count).ToString()
                     };
-                    count++;
-                }
-            }
-            else if(originalArray.Length < modifiedArray.Length)
-            {
-                var addCount = modifiedArray.Length - originalArray.Length;
-                var count = 0;
-                while (count < addCount)
+                }else
                 {
                     yield return new JsonPatchOperation()
                     {
                         Operation = JsonPatchOperationType.add,
-                        PropertyName = path + (originalArray.Length + count).ToString(), 
+                        PropertyName = path + (originalArray.Length + count).ToString(),
                         Value = modifiedArray.GetValue(originalArray.Length + count)
                     };
-                    count++;
                 }
+                count++;
             }
-            yield break;
         }
     }
 }
