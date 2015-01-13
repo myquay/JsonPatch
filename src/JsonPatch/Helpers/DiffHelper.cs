@@ -8,15 +8,27 @@ namespace JsonPatch.Helpers
 {
     public static class DiffHelper
     {
-        public static IEnumerable<JsonPatchOperation> GenerateDiff(Type entity, object originalDocument, object modifiedDocument, string path = "/")
+        public static IEnumerable<JsonPatchOperation> GenerateDiff(object originalDocument, object modifiedDocument, string path = "/")
         {
-            if (originalDocument.GetType() != entity)
-                throw new ArgumentException(string.Format("Original Document is type of {0} but requested type is {1}", originalDocument.GetType().ToString(), entity.ToString()));
+            if (originalDocument.GetType() != modifiedDocument.GetType())
+                throw new ArgumentException(string.Format("Original Document is type of {0} but Modified Document is of type {1}", originalDocument.GetType(), modifiedDocument.GetType()));
 
-            if (modifiedDocument.GetType() != entity)
-                throw new ArgumentException(string.Format("Modified Document is type of {0} but requested type is {1}", modifiedDocument.GetType().ToString(), entity.ToString()));
-
-            var propertyList = entity.GetProperties();
+            //If it's just a value type or a string, then we can compare them here without going any further. 
+            if (originalDocument.GetType().IsValueType || originalDocument.GetType() == typeof(string))
+            {
+                if (originalDocument != modifiedDocument)
+                {
+                    yield return new JsonPatchOperation()
+                    {
+                        Operation = modifiedDocument == null ? JsonPatchOperationType.remove : JsonPatchOperationType.replace,
+                        PropertyName = path,
+                        Value = modifiedDocument
+                    };
+                }
+                yield break;
+            }
+       
+            var propertyList = originalDocument.GetType().GetProperties();
             foreach (var property in propertyList)
             {
                 var originalValue = property.GetValue(originalDocument);
@@ -24,13 +36,25 @@ namespace JsonPatch.Helpers
 
                 if (property.PropertyType.IsArray)
                 {
-                    //Array
-                    foreach (var addRemoveDiff in ArrayAddRemoveDiff(originalValue as Array, modifiedValue as Array, path + property.Name + "/"))
+                    var originalArrayValue = originalValue as Array;
+                    var modifiedArrayValue = modifiedValue as Array;
+
+                    //Array add/remove
+                    foreach (var addRemoveDiff in ArrayAddRemoveDiff(originalArrayValue,  modifiedArrayValue, path + property.Name + "/"))
                         yield return addRemoveDiff;
+
+                    //Compare each object in the array recursively. 
+                    var compareCount = Math.Min(originalArrayValue.Length,modifiedArrayValue.Length);
+                    for (int i = 0; i < compareCount; i++)
+                    {
+                        foreach (var itemDiff in GenerateDiff(originalArrayValue.GetValue(i), modifiedArrayValue.GetValue(i), path + property.Name + "/" + i))
+                            yield return itemDiff;
+                    }
+
                 }else if (property.PropertyType.IsValueType || property.PropertyType != typeof(string))
                 {
                     //Nested object. 
-                    foreach (var patchOperation in GenerateDiff(property.PropertyType, originalValue, modifiedValue, path + property.Name + "/"))
+                    foreach (var patchOperation in GenerateDiff(originalValue, modifiedValue, path + property.Name + "/"))
                         yield return patchOperation;
                 }else if (originalValue != modifiedValue)
                 {

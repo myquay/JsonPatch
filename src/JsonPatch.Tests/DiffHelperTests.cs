@@ -18,7 +18,7 @@ namespace JsonPatch.Tests
             SimpleEntity originalDocument = new SimpleEntity() { Foo = "bar" };
             SimpleEntity modifiedDocument = new SimpleEntity() { Foo = "baz" };
 
-            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(typeof(SimpleEntity), originalDocument, modifiedDocument).ToList();
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
 
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(JsonPatchOperationType.replace, operations.First().Operation);
@@ -32,7 +32,7 @@ namespace JsonPatch.Tests
             SimpleEntity originalDocument = new SimpleEntity() { Foo = "bar" };
             SimpleEntity modifiedDocument = new SimpleEntity() { Foo = null };
 
-            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(typeof(SimpleEntity), originalDocument, modifiedDocument).ToList();
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
 
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
@@ -48,7 +48,7 @@ namespace JsonPatch.Tests
             NestedEntity modifiedDocument = new NestedEntity();
             modifiedDocument.Foo = new SimpleEntity() { Foo = "baz" };
 
-            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(typeof(NestedEntity), originalDocument, modifiedDocument).ToList();
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
 
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(JsonPatchOperationType.replace, operations.First().Operation);
@@ -64,7 +64,8 @@ namespace JsonPatch.Tests
             ArrayEntity modifiedDocument = new ArrayEntity();
             modifiedDocument.Foo = new string[] { "bar", "baz" };
 
-            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(typeof(ArrayEntity), originalDocument, modifiedDocument).ToList();
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(JsonPatchOperationType.add, operations.First().Operation);
             Assert.AreEqual("/Foo/1", operations.First().PropertyName);
@@ -79,10 +80,27 @@ namespace JsonPatch.Tests
             ArrayEntity modifiedDocument = new ArrayEntity();
             modifiedDocument.Foo = new string[] {  };
 
-            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(typeof(ArrayEntity), originalDocument, modifiedDocument).ToList();
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
             Assert.AreEqual("/Foo/0", operations.First().PropertyName);
+        }
+
+        [TestMethod]
+        public void GenerateDiff_ArrayEntityModify_ReturnsReplaceOperation()
+        {
+            ArrayEntity originalDocument = new ArrayEntity();
+            originalDocument.Foo = new string[] { "bar" };
+            ArrayEntity modifiedDocument = new ArrayEntity();
+            modifiedDocument.Foo = new string[] { "baz" };
+
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+
+            Assert.AreEqual(1, operations.Count);
+            Assert.AreEqual(JsonPatchOperationType.replace, operations.First().Operation);
+            Assert.AreEqual("/Foo/0", operations.First().PropertyName);
+            Assert.AreEqual("baz", operations.First().Value);
         }
     }
 }
