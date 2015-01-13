@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JsonPatch.Helpers
 {
@@ -11,23 +9,23 @@ namespace JsonPatch.Helpers
     {
         public static IEnumerable<JsonPatchOperation> GenerateDiff(object originalDocument, object modifiedDocument, string path = "/")
         {
-            if (originalDocument.GetType() != modifiedDocument.GetType())
-                throw new ArgumentException(string.Format("Original Document is type of {0} but Modified Document is of type {1}", originalDocument.GetType(), modifiedDocument.GetType()));
+			if (originalDocument != null && modifiedDocument != null && originalDocument.GetType() != modifiedDocument.GetType())
+				throw new ArgumentException(string.Format("Original Document is type of {0} but Modified Document is of type {1}", originalDocument.GetType(), modifiedDocument.GetType()));
 
-            //If it's just a value type or a string, then we can compare them here without going any further. 
-            if (originalDocument.GetType().IsValueType || originalDocument.GetType() == typeof(string))
-            {
-                if (originalDocument != modifiedDocument)
-                {
-                    yield return new JsonPatchOperation()
-                    {
-                        Operation = modifiedDocument == null ? JsonPatchOperationType.remove : JsonPatchOperationType.replace,
-                        PropertyName = path,
-                        Value = modifiedDocument
-                    };
-                }
-                yield break;
-            }
+			//If it's just a value type or a string, then we can compare them here without going any further. 
+			if (originalDocument.GetType().GetGenericArguments().Any(t => t.IsValueType && t.IsPrimitive) || originalDocument is string)
+			{
+				if (originalDocument != modifiedDocument)
+				{
+					yield return new JsonPatchOperation()
+					{
+						Operation = modifiedDocument == null ? JsonPatchOperationType.remove : JsonPatchOperationType.replace,
+						PropertyName = path,
+						Value = modifiedDocument
+					};
+				}
+				yield break;
+			}
        
             var propertyList = originalDocument.GetType().GetProperties();
             foreach (var property in propertyList)
@@ -52,7 +50,8 @@ namespace JsonPatch.Helpers
                             yield return itemDiff;
                     }
 
-                }else if (property.PropertyType.IsValueType || property.PropertyType != typeof(string))
+				}
+				else if (!property.PropertyType.GetGenericArguments().Any(t => t.IsValueType && t.IsPrimitive) && property.PropertyType != typeof(string))
                 {
                     //Nested object. 
                     foreach (var patchOperation in GenerateDiff(originalValue, modifiedValue, path + property.Name + "/"))
@@ -68,8 +67,6 @@ namespace JsonPatch.Helpers
                     };
                 }
             }
-
-            yield break;
         }
 
         private static IEnumerable<JsonPatchOperation> ArrayAddRemoveDiff(Array originalArray, Array modifiedArray, string path)
@@ -84,14 +81,14 @@ namespace JsonPatch.Helpers
                     yield return new JsonPatchOperation
                     {
                         Operation = JsonPatchOperationType.remove,
-                        PropertyName = path + (originalArray.Length - 1 - count).ToString()
+                        PropertyName = path + (originalArray.Length - 1 - count)
                     };
                 }else
                 {
                     yield return new JsonPatchOperation()
                     {
                         Operation = JsonPatchOperationType.add,
-                        PropertyName = path + (originalArray.Length + count).ToString(),
+                        PropertyName = path + (originalArray.Length + count),
                         Value = modifiedArray.GetValue(originalArray.Length + count)
                     };
                 }

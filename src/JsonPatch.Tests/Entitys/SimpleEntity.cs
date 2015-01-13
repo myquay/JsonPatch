@@ -10,5 +10,6 @@ namespace JsonPatch.Tests.Entitys
     {
         public string Foo { get; set; }
         public string Baz { get; set; }
+		public int? Bar { get; set; }
     }
 }
