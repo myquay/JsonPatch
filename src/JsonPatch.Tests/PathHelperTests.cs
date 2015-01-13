@@ -141,15 +141,15 @@ namespace JsonPatch.Tests
             Assert.IsTrue(isValid);
         }
 
-		[TestMethod]
-		public void IsPathValid_ChildPathOnList_ReturnsTrue()
-		{
-			//act
-			var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Qux/1/Foo");
+        [TestMethod]
+        public void IsPathValid_ChildPathOnList_ReturnsTrue()
+        {
+            //act
+            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Qux/1/Foo");
 
-			//assert
-			Assert.IsTrue(isValid);
-		}
+            //assert
+            Assert.IsTrue(isValid);
+        }
 
         [TestMethod]
         public void IsPathValid_PathOnChildArray_ReturnsTrue()
@@ -270,22 +270,22 @@ namespace JsonPatch.Tests
             Assert.AreEqual(2, entity.Foo.Length);
         }
 
-		[TestMethod]
-		public void SetValueFromPath_ReplaceListValue_UpdatesValue()
-		{
-			//Arrange
-			var entity = new ListEntity
-			{
-				Foo = new List<string> { "Element One", "Element Two" }
-			};
+        [TestMethod]
+        public void SetValueFromPath_ReplaceListValue_UpdatesValue()
+        {
+            //Arrange
+            var entity = new ListEntity
+            {
+                Foo = new List<string> { "Element One", "Element Two" }
+            };
 
-			//act
-			PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
+            //act
+            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
 
-			//Assert
-			Assert.AreEqual("Element Two Updated", entity.Foo[1]);
-			Assert.AreEqual(2, entity.Foo.Count);
-		}
+            //Assert
+            Assert.AreEqual("Element Two Updated", entity.Foo[1]);
+            Assert.AreEqual(2, entity.Foo.Count);
+        }
 
         [TestMethod, ExpectedException(typeof(JsonPatchException))]
         public void SetValueFromPath_ReplaceIndexOutOfBounds_ThrowsJsonPatchException()
@@ -318,23 +318,23 @@ namespace JsonPatch.Tests
             Assert.AreEqual(3, entity.Foo.Length);
         }
 
-		[TestMethod]
-		public void SetValueFromPath_AddListValue_AddsValue()
-		{
-			//Arrange
-			var entity = new ListEntity
-			{
-				Foo = new List<string> { "Element One", "Element Two" }
-			};
+        [TestMethod]
+        public void SetValueFromPath_AddListValue_AddsValue()
+        {
+            //Arrange
+            var entity = new ListEntity
+            {
+                Foo = new List<string> { "Element One", "Element Two" }
+            };
 
-			//act
-			PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.add);
+            //act
+            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.add);
 
-			//Assert
-			Assert.AreEqual("Element Two Updated", entity.Foo[1]);
-			Assert.AreEqual("Element Two", entity.Foo[2]);
-			Assert.AreEqual(3, entity.Foo.Count);
-		}
+            //Assert
+            Assert.AreEqual("Element Two Updated", entity.Foo[1]);
+            Assert.AreEqual("Element Two", entity.Foo[2]);
+            Assert.AreEqual(3, entity.Foo.Count);
+        }
 
         [TestMethod]
         public void SetValueFromPath_AddArrayValueAtEnd_AddsValue()
@@ -354,23 +354,23 @@ namespace JsonPatch.Tests
             Assert.AreEqual(3, entity.Foo.Length);
         }
 
-		[TestMethod]
-		public void SetValueFromPath_AddListValueAtEnd_AddsValue()
-		{
-			//Arrange
-			var entity = new ListEntity
-			{
-				Foo = new List<string> { "Element One", "Element Two" }
-			};
+        [TestMethod]
+        public void SetValueFromPath_AddListValueAtEnd_AddsValue()
+        {
+            //Arrange
+            var entity = new ListEntity
+            {
+                Foo = new List<string> { "Element One", "Element Two" }
+            };
 
-			//act
-			PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.add);
+            //act
+            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.add);
 
-			//Assert
-			Assert.AreEqual("Element Two Updated", entity.Foo[2]);
-			Assert.AreEqual("Element Two", entity.Foo[1]);
-			Assert.AreEqual(3, entity.Foo.Count);
-		}
+            //Assert
+            Assert.AreEqual("Element Two Updated", entity.Foo[2]);
+            Assert.AreEqual("Element Two", entity.Foo[1]);
+            Assert.AreEqual(3, entity.Foo.Count);
+        }
 
         [TestMethod, ExpectedException(typeof(JsonPatchException))]
         public void SetValueFromPath_AddIndexOutOfBounds_ThrowsJsonPatchException()
@@ -419,39 +419,39 @@ namespace JsonPatch.Tests
             Assert.AreEqual(1, entity.Foo.Length);
         }
 
-		[TestMethod]
-		public void SetValueFromPath_RemoveListValueFromStart_RemovesValue()
-		{
-			//Arrange
-			var entity = new ListEntity
-			{
-				Foo = new List<string> { "Element One", "Element Two" }
-			};
+        [TestMethod]
+        public void SetValueFromPath_RemoveListValueFromStart_RemovesValue()
+        {
+            //Arrange
+            var entity = new ListEntity
+            {
+                Foo = new List<string> { "Element One", "Element Two" }
+            };
 
-			//act
-			PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/0", entity, null, JsonPatchOperationType.remove);
+            //act
+            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/0", entity, null, JsonPatchOperationType.remove);
 
-			//Assert
-			Assert.AreEqual("Element Two", entity.Foo[0]);
-			Assert.AreEqual(1, entity.Foo.Count);
-		}
+            //Assert
+            Assert.AreEqual("Element Two", entity.Foo[0]);
+            Assert.AreEqual(1, entity.Foo.Count);
+        }
 
-		[TestMethod]
-		public void SetValueFromPath_RemoveListValueFromEnd_RemovesValue()
-		{
-			//Arrange
-			var entity = new ListEntity
-			{
-				Foo = new List<string> { "Element One", "Element Two" }
-			};
+        [TestMethod]
+        public void SetValueFromPath_RemoveListValueFromEnd_RemovesValue()
+        {
+            //Arrange
+            var entity = new ListEntity
+            {
+                Foo = new List<string> { "Element One", "Element Two" }
+            };
 
-			//act
-			PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, null, JsonPatchOperationType.remove);
+            //act
+            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, null, JsonPatchOperationType.remove);
 
-			//Assert
-			Assert.AreEqual("Element One", entity.Foo[0]);
-			Assert.AreEqual(1, entity.Foo.Count);
-		}
+            //Assert
+            Assert.AreEqual("Element One", entity.Foo[0]);
+            Assert.AreEqual(1, entity.Foo.Count);
+        }
 
 
         [TestMethod, ExpectedException(typeof(JsonPatchException))]
@@ -518,21 +518,21 @@ namespace JsonPatch.Tests
             Assert.AreEqual("New Value", entity.Baz[0].Foo);
         }
 
-		[TestMethod]
-		public void SetValueFromPath_NestedAddToEmptyList_CreatesListAndAddsValue()
-		{
-			//arrange
-			var entity = new ComplexEntity
-			{
-				Qux = new List<SimpleEntity> { new SimpleEntity { Foo = "Foo" } }
-			};
+        [TestMethod]
+        public void SetValueFromPath_NestedAddToEmptyList_CreatesListAndAddsValue()
+        {
+            //arrange
+            var entity = new ComplexEntity
+            {
+                Qux = new List<SimpleEntity> { new SimpleEntity { Foo = "Foo" } }
+            };
 
-			//act
-			PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, "New Value", JsonPatchOperationType.replace);
+            //act
+            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, "New Value", JsonPatchOperationType.replace);
 
-			//assert
-			Assert.AreEqual("New Value", entity.Qux[0].Foo);
-		}
+            //assert
+            Assert.AreEqual("New Value", entity.Qux[0].Foo);
+        }
         #endregion
     }
 }
