@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace JsonPatch.Tests.Entitys
 {
-    public class SimpleEntity
+    public class NestedEntity
     {
-        public string Foo { get; set; }
-        public string Baz { get; set; }
-		public int? Bar { get; set; }
+        public SimpleEntity Foo { get; set; }
     }
 }
