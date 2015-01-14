@@ -9,23 +9,24 @@ namespace JsonPatch.Helpers
     {
         public static IEnumerable<JsonPatchOperation> GenerateDiff(object originalDocument, object modifiedDocument, string path = "/")
         {
-			if (originalDocument != null && modifiedDocument != null && originalDocument.GetType() != modifiedDocument.GetType())
-				throw new ArgumentException(string.Format("Original Document is type of {0} but Modified Document is of type {1}", originalDocument.GetType(), modifiedDocument.GetType()));
+            if (originalDocument != null && modifiedDocument != null && originalDocument.GetType() != modifiedDocument.GetType())
+                throw new ArgumentException(string.Format("Original Document is type of {0} but Modified Document is of type {1}", originalDocument.GetType(), modifiedDocument.GetType()));
 
-			//If it's just a value type or a string, then we can compare them here without going any further. 
-			if (originalDocument.GetType().GetGenericArguments().Any(t => t.IsValueType && t.IsPrimitive) || originalDocument is string)
-			{
-				if (originalDocument != modifiedDocument)
-				{
-					yield return new JsonPatchOperation()
-					{
-						Operation = modifiedDocument == null ? JsonPatchOperationType.remove : JsonPatchOperationType.replace,
-						PropertyName = path,
-						Value = modifiedDocument
-					};
-				}
-				yield break;
-			}
+
+            //If it's just a value type or a string, then we can compare them here without going any further. 
+            if (originalDocument.GetType().GetGenericArguments().Any(t => t.IsValueType && t.IsPrimitive) || originalDocument is string)
+            {
+                if (originalDocument != modifiedDocument)
+                {
+                    yield return new JsonPatchOperation()
+                    {
+                        Operation = modifiedDocument == null ? JsonPatchOperationType.remove : JsonPatchOperationType.replace,
+                        PropertyName = path,
+                        Value = modifiedDocument
+                    };
+                }
+                yield break;
+            }
        
             var propertyList = originalDocument.GetType().GetProperties();
             foreach (var property in propertyList)
@@ -33,6 +34,24 @@ namespace JsonPatch.Helpers
                 var originalValue = property.GetValue(originalDocument);
                 var modifiedValue = property.GetValue(modifiedDocument);
 
+                //If both values are null. Just continue because it saves a bit of hassle later on
+                if (originalValue == null && modifiedValue == null)
+                    continue;
+
+
+                //If one of the values is null, then we don't need to do a deep check. 
+                if (originalValue == null || modifiedValue == null)
+                {
+                    yield return new JsonPatchOperation
+                    {
+                        Operation = modifiedValue == null ? JsonPatchOperationType.remove : JsonPatchOperationType.add,
+                        PropertyName = path + property.Name,
+                        Value = modifiedValue
+                    };
+                    continue;
+                }
+
+                //If it's an array. 
                 if (property.PropertyType.IsArray || (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(List<>)))
                 {
                     var originalArrayValue = property.PropertyType.IsArray ? originalValue as Array : ((IEnumerable)originalValue).Cast<object>().ToArray();
@@ -50,18 +69,20 @@ namespace JsonPatch.Helpers
                             yield return itemDiff;
                     }
 
-				}
-				else if (!property.PropertyType.GetGenericArguments().Any(t => t.IsValueType && t.IsPrimitive) && property.PropertyType != typeof(string))
+                }
+                //Iif it's a non value type (e.g. a nested class)
+                else if (!property.PropertyType.GetGenericArguments().Any(t => t.IsValueType && t.IsPrimitive) && property.PropertyType != typeof(string))
                 {
-                    //Nested object. 
                     foreach (var patchOperation in GenerateDiff(originalValue, modifiedValue, path + property.Name + "/"))
                         yield return patchOperation;
-                }else if (originalValue != modifiedValue)
+                }
+                //it's a value type at this point, just compare values. 
+                else if (originalValue != modifiedValue)
                 {
                     //Standard Value Type/String
                     yield return new JsonPatchOperation()
                     {
-                        Operation = modifiedValue == null ? JsonPatchOperationType.remove : JsonPatchOperationType.replace,
+                        Operation = JsonPatchOperationType.replace,
                         PropertyName = path + property.Name,
                         Value = property.GetValue(modifiedDocument)
                     };

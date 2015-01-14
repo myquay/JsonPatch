@@ -26,18 +26,19 @@ namespace JsonPatch.Tests
             Assert.AreEqual(modifiedDocument.Foo, operations.First().Value);
         }
 
-		[TestMethod]
-		public void GenerateDiff_SimpleEntitySetNullableToNull_ReturnsRemoveOperation()
-		{
-			SimpleEntity originalDocument = new SimpleEntity() { Bar = 1 };
-			SimpleEntity modifiedDocument = new SimpleEntity() { Bar = null };
+        [TestMethod]
+        public void GenerateDiff_SimpleEntitySetNullableToNull_ReturnsRemoveOperation()
+        {
+            SimpleEntity originalDocument = new SimpleEntity() { Bar = 1 };
+            SimpleEntity modifiedDocument = new SimpleEntity() { Bar = null };
 
-			List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
 
-			Assert.AreEqual(1, operations.Count);
-			Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
-			Assert.AreEqual("/Bar", operations.First().PropertyName);
-		}
+            Assert.AreEqual(1, operations.Count);
+            Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
+            Assert.AreEqual("/Bar", operations.First().PropertyName);
+            Assert.IsNull(operations.First().Value);
+        }
 
         [TestMethod]
         public void GenerateDiff_SimpleEntityRemove_ReturnsRemoveOperation()
@@ -50,7 +51,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
             Assert.AreEqual("/Foo", operations.First().PropertyName);
-            Assert.AreEqual(modifiedDocument.Foo, operations.First().Value);
+            Assert.IsNull(operations.First().Value);
         }
 
         [TestMethod]
@@ -98,6 +99,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
             Assert.AreEqual("/Foo/0", operations.First().PropertyName);
+            Assert.IsNull(operations.First().Value);
         }
 
         [TestMethod]
@@ -145,6 +147,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(1, operations.Count);
             Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
             Assert.AreEqual("/Foo/0", operations.First().PropertyName);
+            Assert.IsNull(operations.First().Value);
         }
 
         [TestMethod]
@@ -163,6 +166,34 @@ namespace JsonPatch.Tests
             Assert.AreEqual("baz", operations.First().Value);
         }
 
+        [TestMethod]
+        public void GenerateDiff_ComplexEntitySetNull_ReturnsRemoveOperation()
+        {
+            ComplexEntity originalDocument = new ComplexEntity();
+            originalDocument.Foo = new ArrayEntity();
+            ComplexEntity modifiedDocument = new ComplexEntity();
 
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+
+            Assert.AreEqual(1, operations.Count);
+            Assert.AreEqual(JsonPatchOperationType.remove, operations.First().Operation);
+            Assert.AreEqual("/Foo", operations.First().PropertyName);
+            Assert.IsNull(operations.First().Value);
+        }
+
+        [TestMethod]
+        public void GenerateDiff_ComplexEntitySetProperty_ReturnsAddOperation()
+        {
+            ComplexEntity originalDocument = new ComplexEntity();
+            ComplexEntity modifiedDocument = new ComplexEntity();
+            modifiedDocument.Foo = new ArrayEntity();
+
+            List<JsonPatchOperation> operations = DiffHelper.GenerateDiff(originalDocument, modifiedDocument).ToList();
+
+            Assert.AreEqual(1, operations.Count);
+            Assert.AreEqual(JsonPatchOperationType.add, operations.First().Operation);
+            Assert.AreEqual("/Foo", operations.First().PropertyName);
+            Assert.AreEqual(modifiedDocument.Foo, operations.First().Value);
+        }
     }
 }
