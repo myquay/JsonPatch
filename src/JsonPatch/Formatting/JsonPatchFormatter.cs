@@ -63,6 +63,10 @@ namespace JsonPatch.Formatting
                     {
                         jsonPatchDocument.Replace(operation.path,  operation.value);
                     }
+                    else if (operation.op == Constants.Operations.MOVE)
+                    {
+                        jsonPatchDocument.Move(operation.from, operation.path);
+                    }
                     else
                     {
                         throw new JsonPatchParseException(String.Format("The operation '{0}' is not supported.", operation.op));
