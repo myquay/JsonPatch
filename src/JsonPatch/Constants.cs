@@ -13,6 +13,7 @@ namespace JsonPatch
             public const string ADD = "add";
             public const string REMOVE = "remove";
             public const string REPLACE = "replace";
+            public const string MOVE = "move";
         }
     }
 }

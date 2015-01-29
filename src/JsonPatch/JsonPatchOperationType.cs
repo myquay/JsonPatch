@@ -10,6 +10,7 @@ namespace JsonPatch
     {
         add = 0,
         remove = 1,
-        replace = 2
+        replace = 2,
+        move = 3
     }
 }
