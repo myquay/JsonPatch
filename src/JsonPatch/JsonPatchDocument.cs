@@ -47,6 +47,18 @@ namespace JsonPatch
             });
         }
 
+        public void Move(string from, string path)
+        {
+            _operations.Add(new JsonPatchOperation
+            {
+                Operation = JsonPatchOperationType.move,
+                FromPath = from,
+                ParsedFromPath = PathHelper.ParsePath(from, typeof(TEntity)),
+                Path = path,
+                ParsedPath = PathHelper.ParsePath(path, typeof(TEntity)),
+            });
+        }
+
         public void ApplyUpdatesTo(TEntity entity)
         {
             foreach (var operation in _operations)
@@ -61,6 +73,11 @@ namespace JsonPatch
                         break;
                     case JsonPatchOperationType.add:
                         PathHelper.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, operation.Value, JsonPatchOperationType.add);
+                        break;
+                    case JsonPatchOperationType.move:
+                        var value = PathHelper.GetValueFromPath(typeof(TEntity), operation.ParsedFromPath, entity);
+                        PathHelper.SetValueFromPath(typeof(TEntity), operation.ParsedFromPath, entity, null, JsonPatchOperationType.remove);
+                        PathHelper.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, value, JsonPatchOperationType.add);
                         break;
                     default:
                         throw new NotSupportedException("Operation not supported: " + operation.Operation);
