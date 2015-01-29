@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace System
+namespace JsonPatch.Extensions
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
-        public static bool IsPositiveInteger(this string @string){
+        internal static bool IsPositiveInteger(this string @string)
+        {
             int n;
 
             bool isInteger = Int32.TryParse(@string, out n);
@@ -22,7 +19,7 @@ namespace System
             return true;
         }
 
-        public static int ToInt32(this string @string)
+        internal static int ToInt32(this string @string)
         {
             return Int32.Parse(@string);
         }

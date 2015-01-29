@@ -1,10 +1,10 @@
-﻿using JsonPatch.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using JsonPatch.Paths;
 
 namespace JsonPatch
 {
@@ -17,46 +17,33 @@ namespace JsonPatch
 
         public void Add(string path, object value)
         {
-            if (!PathHelper.IsPathValid(typeof(TEntity), path))
-            {
-                throw new JsonPatchParseException(String.Format("The path '{0}' is not valid.", path));
-            }
-
             _operations.Add(new JsonPatchOperation
             {
                 Operation = JsonPatchOperationType.add,
-                PropertyName = path,
+                Path = path,
+                ParsedPath = PathHelper.ParsePath(path, typeof(TEntity)),
                 Value = value
             });
         }
 
         public void Replace(string path, object value)
         {
-            if (!PathHelper.IsPathValid(typeof(TEntity), path))
-            {
-                throw new JsonPatchParseException(String.Format("The path '{0}' is not valid.", path));
-            }
-
             _operations.Add(new JsonPatchOperation
             {
                 Operation = JsonPatchOperationType.replace,
-                PropertyName = path,
+                Path = path,
+                ParsedPath = PathHelper.ParsePath(path, typeof(TEntity)),
                 Value = value
             });
         }
 
         public void Remove(string path)
         {
-            if (!PathHelper.IsPathValid(typeof(TEntity), path))
-            {
-                throw new JsonPatchParseException(String.Format("The path '{0}' is not valid.", path));
-            }
-            
-
             _operations.Add(new JsonPatchOperation
             {
                 Operation = JsonPatchOperationType.remove,
-                PropertyName = path
+                Path = path,
+                ParsedPath = PathHelper.ParsePath(path, typeof(TEntity))
             });
         }
 
@@ -64,17 +51,19 @@ namespace JsonPatch
         {
             foreach (var operation in _operations)
             {
-                if (operation.Operation == JsonPatchOperationType.remove)
+                switch (operation.Operation)
                 {
-                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, null, JsonPatchOperationType.remove);
-                }
-                else if (operation.Operation == JsonPatchOperationType.replace)
-                {
-                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, operation.Value, JsonPatchOperationType.replace);
-                }
-                else if (operation.Operation == JsonPatchOperationType.add)
-                {
-                    PathHelper.SetValueFromPath(typeof(TEntity), operation.PropertyName, entity, operation.Value, JsonPatchOperationType.add);
+                    case JsonPatchOperationType.remove:
+                        PathHelper.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, null, JsonPatchOperationType.remove);
+                        break;
+                    case JsonPatchOperationType.replace:
+                        PathHelper.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, operation.Value, JsonPatchOperationType.replace);
+                        break;
+                    case JsonPatchOperationType.add:
+                        PathHelper.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, operation.Value, JsonPatchOperationType.add);
+                        break;
+                    default:
+                        throw new NotSupportedException("Operation not supported: " + operation.Operation);
                 }
             }
         }
