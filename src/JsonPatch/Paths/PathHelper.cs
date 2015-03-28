@@ -9,7 +9,12 @@ namespace JsonPatch.Paths
     {
         internal static IPathResolver PathResolver
         {
-            get { return JsonPatchFormatter.Settings.PathResolver; }
+            get
+            {
+                return JsonPatchFormatter.Settings == null
+                    ? JsonPatchSettings.DefaultPatchSettings().PathResolver
+                    : JsonPatchFormatter.Settings.PathResolver;
+            }
         }
 
         #region Parse/Validate Paths
