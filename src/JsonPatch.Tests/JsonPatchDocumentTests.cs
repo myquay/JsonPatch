@@ -308,5 +308,55 @@ namespace JsonPatch.Tests
 
         #endregion
 
+        #region JsonPatch HasOperations Tests
+
+        [TestMethod]
+        public void HasOperations_FalseByDefault()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Assert
+            Assert.IsFalse(patchDocument.HasOperations);
+        }
+
+        [TestMethod]
+        public void Add_ValidPath_SetsHasOperations()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Act
+            patchDocument.Add("Foo", "bar");
+
+            //Assert
+            Assert.IsTrue(patchDocument.HasOperations);
+        }
+
+        public void Remove_ValidPath_SetsHasOperations()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Act
+            patchDocument.Remove("Foo");
+
+            //Assert
+            Assert.IsTrue(patchDocument.HasOperations);
+        }
+
+        [TestMethod]
+        public void Replace_ValidPath_SetsHasOperations()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Act
+            patchDocument.Replace("Foo", "bar");
+
+            //Assert
+            Assert.IsTrue(patchDocument.HasOperations);
+        }
+        #endregion
     }
 }
