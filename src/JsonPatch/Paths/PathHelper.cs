@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using JsonPatch.Extensions;
 using JsonPatch.Helpers;
 using JsonPatch.Paths.Components;
@@ -101,7 +103,7 @@ namespace JsonPatch.Paths
 
             // Attempt to retrieve the corresponding property.
             Type parentType = (previous == null) ? rootEntityType : previous.ComponentType;
-            var property = parentType.GetProperty(component);
+            var property = ParseProperty(parentType, component);
 
             if (property == null)
             {
@@ -114,6 +116,47 @@ namespace JsonPatch.Paths
                 PropertyInfo = property,
                 ComponentType = property.PropertyType
             };
+        }
+
+        private static PropertyInfo ParseProperty(Type parentType, string component) {
+            var allProperties = parentType.GetProperties();
+
+            var match = FindDataMemberMatch(allProperties, component);
+            if (match != null) return match;
+
+            match = FindJsonPropertyMatch(allProperties, component);
+            if (match != null) return match;
+
+            match = FindPropertyMatch(allProperties, component);
+            if (match != null) return match;
+
+            match = FindDataMemberMatch(allProperties, component, StringComparison.OrdinalIgnoreCase);
+            if (match != null) return match;
+
+            match = FindJsonPropertyMatch(allProperties, component, StringComparison.OrdinalIgnoreCase);
+            if (match != null) return match;
+
+            return FindPropertyMatch(allProperties, component, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static PropertyInfo FindDataMemberMatch(PropertyInfo[] allProperties, string component, StringComparison comparisonType = StringComparison.Ordinal) {
+            return allProperties.FirstOrDefault(p => {
+                var dataMember = p.GetCustomAttributes<DataMemberAttribute>().FirstOrDefault();
+                if (dataMember == null) return false;
+                return string.Equals(dataMember.Name, component, comparisonType);
+            });
+        }
+
+        private static PropertyInfo FindJsonPropertyMatch(PropertyInfo[] allProperties, string component, StringComparison comparisonType = StringComparison.Ordinal) {
+            return allProperties.FirstOrDefault(p => {
+                var jsonProperty = p.GetCustomAttributes<JsonPropertyAttribute>().FirstOrDefault();
+                if (jsonProperty == null) return false;
+                return string.Equals(jsonProperty.PropertyName, component, comparisonType);
+            });
+        }
+
+        private static PropertyInfo FindPropertyMatch(PropertyInfo[] allProperties, string component, StringComparison comparisonType = StringComparison.Ordinal) {
+            return allProperties.FirstOrDefault(p => string.Equals(p.Name, component, comparisonType));
         }
 
         #endregion

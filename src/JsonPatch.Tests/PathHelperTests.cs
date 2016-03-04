@@ -85,6 +85,20 @@ namespace JsonPatch.Tests
             PathHelper.ParsePath("/Bar/5", typeof(SimpleEntity));
         }
 
+        [TestMethod]
+        public void ParsePath_DataMember_ParsesSuccessfully() {
+            PathHelper.ParsePath("pId", typeof(SimpleEntity));
+        }
+
+        [TestMethod]
+        public void ParsePath_JsonProperty_ParsesSuccessfully() {
+            PathHelper.ParsePath("jsonProperty", typeof(SimpleEntity));
+        }
+
+        [TestMethod]
+        public void ParsePath_CaseInsensitive_FallbackSuccessful() {
+            PathHelper.ParsePath("bar", typeof(SimpleEntity));
+        }
         #endregion
 
         #region IsPathValid
