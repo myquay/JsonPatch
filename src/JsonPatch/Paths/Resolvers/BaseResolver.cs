@@ -67,9 +67,8 @@ namespace JsonPatch.Paths.Resolvers
                     component, parentType.Name));
             }
 
-            return new PropertyPathComponent(component)
+            return new PropertyPathComponent(property.Name)
             {
-                PropertyInfo = property,
                 ComponentType = property.PropertyType
             };
         }
@@ -135,7 +134,7 @@ namespace JsonPatch.Paths.Resolvers
                                     component.Name, parentPath));
                             }
 
-                            previous = component.PropertyInfo.GetValue(previous);
+                            previous = component.GetPropertyInfo(previous).GetValue(previous);
                         })
                         .Case((CollectionIndexPathComponent component) =>
                         {
@@ -186,10 +185,10 @@ namespace JsonPatch.Paths.Resolvers
                         {
                             case JsonPatchOperationType.add:
                             case JsonPatchOperationType.replace:
-                                component.PropertyInfo.SetValue(previous, ConvertValue(value, component.ComponentType));
+                                component.GetPropertyInfo(previous).SetValue(previous, ConvertValue(value, component.ComponentType));
                                 break;
                             case JsonPatchOperationType.remove:
-                                component.PropertyInfo.SetValue(previous, null);
+                                component.GetPropertyInfo(previous).SetValue(previous, null);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException("operationType");

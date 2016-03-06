@@ -9,6 +9,9 @@ namespace JsonPatch.Paths.Components
         {
         }
 
-        public PropertyInfo PropertyInfo { get; set; }
+        public PropertyInfo GetPropertyInfo(object entity)
+        {
+            return entity.GetType().GetProperty(Name);
+        }
     }
 }

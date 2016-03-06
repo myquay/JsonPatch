@@ -34,7 +34,7 @@ namespace JsonPatch.Tests
 
             //assert
             Assert.AreEqual(1, components.Length);
-            Assert.AreEqual("pId", components[0].Name);
+            Assert.AreEqual("ParId", components[0].Name);
             Assert.IsInstanceOfType(components[0], typeof(PropertyPathComponent));
             Assert.AreEqual(typeof(string), components[0].ComponentType);
         }
@@ -47,7 +47,7 @@ namespace JsonPatch.Tests
 
             //assert
             Assert.AreEqual(1, components.Length);
-            Assert.AreEqual("jsonProperty", components[0].Name);
+            Assert.AreEqual("Car", components[0].Name);
             Assert.IsInstanceOfType(components[0], typeof(PropertyPathComponent));
             Assert.AreEqual(typeof(string), components[0].ComponentType);
         }

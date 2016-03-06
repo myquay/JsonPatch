@@ -36,7 +36,7 @@ namespace JsonPatch.Tests
 
             //assert
             Assert.AreEqual(1, pathComponents.Length);
-            Assert.AreEqual("bar", pathComponents[0].Name);
+            Assert.AreEqual("Bar", pathComponents[0].Name);
             Assert.IsInstanceOfType(pathComponents[0], typeof(PropertyPathComponent));
             Assert.AreEqual(typeof(int), pathComponents[0].ComponentType);
             Assert.IsFalse(pathComponents[0].IsCollection);
@@ -50,7 +50,7 @@ namespace JsonPatch.Tests
 
             //assert
             Assert.AreEqual(1, pathComponents.Length);
-            Assert.AreEqual("foo", pathComponents[0].Name);
+            Assert.AreEqual("Foo", pathComponents[0].Name);
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace JsonPatch.Tests
 
             //assert
             Assert.AreEqual(1, pathComponents.Length);
-            Assert.AreEqual("foo", pathComponents[0].Name);
+            Assert.AreEqual("Foo", pathComponents[0].Name);
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
@@ -86,7 +86,7 @@ namespace JsonPatch.Tests
 
             //assert
             Assert.AreEqual(2, pathComponents.Length);
-            Assert.AreEqual("foo", pathComponents[0].Name);
+            Assert.AreEqual("Foo", pathComponents[0].Name);
             Assert.IsTrue(pathComponents[0].IsCollection);
             Assert.AreEqual("5", pathComponents[1].Name);
             Assert.IsInstanceOfType(pathComponents[1], typeof(CollectionIndexPathComponent));
