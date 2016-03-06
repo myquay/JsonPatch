@@ -13,8 +13,15 @@ namespace JsonPatch.Formatting
 {
     public class JsonPatchFormatter : BufferedMediaTypeFormatter
     {
-        public JsonPatchFormatter()
+        internal static JsonPatchSettings Settings { get; private set; }
+        public JsonPatchFormatter() : this(JsonPatchSettings.DefaultPatchSettings())
         {
+            
+        }
+
+        public JsonPatchFormatter(JsonPatchSettings settings)
+        {
+            Settings = settings;
             SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json-patch+json"));
         }
 

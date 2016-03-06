@@ -10,10 +10,11 @@ namespace JsonPatch
 {
     public class JsonPatchDocument<TEntity> : IJsonPatchDocument where TEntity : class, new()
     {
-
         private List<JsonPatchOperation> _operations = new List<JsonPatchOperation>();
 
         public List<JsonPatchOperation> Operations { get { return _operations; } }
+
+        public bool HasOperations { get { return _operations.Count > 0; } }
 
         public void Add(string path, object value)
         {

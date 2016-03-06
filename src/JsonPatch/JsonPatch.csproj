@@ -55,6 +55,7 @@
     <Compile Include="JsonPatchParseException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Formatting\JsonPatchFormatter.cs" />
+    <Compile Include="JsonPatchSettings.cs" />
     <Compile Include="Paths\Components\CollectionIndexPathComponent.cs" />
     <Compile Include="Paths\Components\PathComponent.cs" />
     <Compile Include="Paths\PathHelper.cs" />
@@ -65,6 +66,12 @@
     <Compile Include="JsonPatchException.cs" />
     <Compile Include="Model\PatchOperation.cs" />
     <Compile Include="Paths\Components\PropertyPathComponent.cs" />
+    <Compile Include="Paths\Resolvers\AttributePropertyPathResolver.cs" />
+    <Compile Include="Paths\Resolvers\BaseResolver.cs" />
+    <Compile Include="Paths\Resolvers\CaseInsensitivePropertyPathResolver.cs" />
+    <Compile Include="Paths\Resolvers\ExactCasePropertyPathResolver.cs" />
+    <Compile Include="Paths\Resolvers\FlexiblePathResolver.cs" />
+    <Compile Include="Paths\Resolvers\IPathResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
