@@ -42,6 +42,45 @@ The main thing is to make sure the content type is "application/json-patch+json"
         { "op": "add", "path": "/a/b/c", "value": "foo" }
     ]
 
+##Options
+
+The path specified in the patch request can be resolved to a different property on the model using a resolver.
+
+E.g. the FlexiblePathResolver will match a property based on
+* The JsonProperty attribute
+* The DataMember attribute
+* The Property Name (Case Insensitive)
+
+```C#
+config.Formatters.Add(new JsonPatchFormatter(new JsonPatchSettings
+{
+     PathResolver = new FlexiblePathResolver()
+}));
+```
+
+Now the request 
+
+    PATCH /my/data HTTP/1.1
+    Host: example.org
+    Content-Type: application/json-patch+json
+    
+    [
+        { "op": "add", "path": "/sampleProperty", "value": "foo" }
+    ]
+    
+Will be valid for the class
+
+    {
+        [JsonProperty("sampleProperty")]
+        public string SampeProperty {get;set;}
+    }
+
+Available resolvers are
+* ExactCasePropertyPathResolver *(default for backwards compatibility)*
+* CaseInsensitivePropertyPathResolver
+* AttributePropertyPathResolver
+* FlexiblePathResolver
+
 Notes
 =========
 
