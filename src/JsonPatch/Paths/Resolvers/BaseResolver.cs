@@ -12,9 +12,18 @@ namespace JsonPatch.Paths.Resolvers
 {
     public abstract class BaseResolver : IPathResolver
     {
-        protected abstract PropertyInfo GetProperty(Type parentType, string component);
+        internal abstract PropertyInfo GetProperty(Type parentType, string component);
 
-        protected abstract string[] GetPathComponents(string path);
+        protected string[] GetPathComponents(string path)
+        {
+            // Normalize the path by ensuring it begins with a single forward slash, and has
+            // no trailing slashes. Modify the path variable itself so that any character
+            // positions we report in error messages are accurate.
+
+            path = "/" + path.Trim('/');
+
+            return path.Split('/').Skip(1).ToArray();
+        }
 
         public PathComponent ParsePathComponent(string component, Type rootEntityType, PathComponent previous = null)
         {

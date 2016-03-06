@@ -12,6 +12,7 @@ namespace JsonPatch.Tests
     [TestClass]
     public class PathHelperTests
     {
+
         private ExactCasePropertyPathResolver _resolver;
 
         [TestInitialize]
@@ -40,6 +41,13 @@ namespace JsonPatch.Tests
             Assert.IsInstanceOfType(pathComponents[0], typeof(PropertyPathComponent));
             Assert.AreEqual(typeof(int), pathComponents[0].ComponentType);
             Assert.IsFalse(pathComponents[0].IsCollection);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
+        public void ParsePath_SimpleProperty_ParsesFails()
+        {
+            //act
+            var pathComponents = PathHelper.ParsePath("bar", typeof(SimpleEntity));
         }
 
         [TestMethod]
