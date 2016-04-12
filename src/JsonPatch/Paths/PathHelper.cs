@@ -35,7 +35,7 @@ namespace JsonPatch.Paths
         public static PathComponent[] ParsePath(string path, Type entityType)
         {
             return PathResolver.ParsePath(path, entityType);
-            }
+        }
 
         #endregion
 

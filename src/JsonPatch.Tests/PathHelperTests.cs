@@ -102,6 +102,21 @@ namespace JsonPatch.Tests
             Assert.AreEqual(typeof(string), pathComponents[1].ComponentType);
         }
 
+        [TestMethod]
+        public void ParsePath_CollectionAdd_ParsesSuccessfully()
+        {
+            //act
+            var pathComponents = PathHelper.ParsePath("/Foo/-", typeof(ListEntity));
+
+            //assert
+            Assert.AreEqual(2, pathComponents.Length);
+            Assert.AreEqual("Foo", pathComponents[0].Name);
+            Assert.IsTrue(pathComponents[0].IsCollection);
+            Assert.AreEqual("-", pathComponents[1].Name);
+            Assert.IsInstanceOfType(pathComponents[1], typeof(CollectionPathComponent));
+            Assert.AreEqual(typeof(string), pathComponents[1].ComponentType);
+        }
+
         [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
         public void ParsePath_CollectionIndexAfterNonCollectionProperty_ParsesSuccessfully()
         {
@@ -584,7 +599,7 @@ namespace JsonPatch.Tests
         }
 
         [TestMethod]
-        public void SetValueFromPath_AddListValue_AddsValue()
+        public void SetValueFromPath_AddListValueByIndex_InsertsValue()
         {
             //Arrange
             var entity = new ListEntity
@@ -598,6 +613,23 @@ namespace JsonPatch.Tests
             //Assert
             Assert.AreEqual("Element Two Updated", entity.Foo[1]);
             Assert.AreEqual("Element Two", entity.Foo[2]);
+            Assert.AreEqual(3, entity.Foo.Count);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_AddListValue_AddsValue()
+        {
+            //Arrange
+            var entity = new ListEntity
+            {
+                Foo = new List<string> { "Element One", "Element Two" }
+            };
+
+            //act
+            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/-", entity, "Element Three", JsonPatchOperationType.add);
+
+            //Assert
+            Assert.AreEqual("Element Three", entity.Foo[2]);
             Assert.AreEqual(3, entity.Foo.Count);
         }
 

@@ -55,6 +55,28 @@ namespace JsonPatch.Paths.Resolvers
                 };
             }
 
+            // If the path component is a '-' character, it represents insert of an element at the end of a collection
+            if (component.Equals("-", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (previous == null)
+                {
+                    throw new JsonPatchParseException("The first path component may not be a '-'.");
+                }
+
+                if (!previous.IsCollection)
+                {
+                    throw new JsonPatchParseException(string.Format(
+                        "Character '-' is not valid here because the previous path component (\"{1}\") " +
+                        "does not represent a collection type.",
+                        component, previous.Name));
+                }
+
+                return new CollectionPathComponent(component)
+                {
+                    ComponentType = GetCollectionType(previous.ComponentType)
+                };
+            }
+
             // Otherwise, the path component represents a property name.
 
             // Attempt to retrieve the corresponding property.
@@ -189,6 +211,40 @@ namespace JsonPatch.Paths.Resolvers
                                 break;
                             case JsonPatchOperationType.remove:
                                 component.GetPropertyInfo(previous).SetValue(previous, null);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException("operationType");
+                        }
+                    })
+                    .Case((CollectionPathComponent component) =>
+                    {
+                        var list = previous as IList;
+                        if (list == null)
+                        {
+                            throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
+                        }
+
+                        switch (operationType)
+                        {
+                            case JsonPatchOperationType.add:
+                                list.Add(ConvertValue(value, component.ComponentType));
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException("operationType");
+                        }
+                    })
+                    .Case((CollectionPathComponent component) =>
+                    {
+                        var list = previous as IList;
+                        if (list == null)
+                        {
+                            throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
+                        }
+
+                        switch (operationType)
+                        {
+                            case JsonPatchOperationType.add:
+                                list.Add(ConvertValue(value, component.ComponentType));
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException("operationType");

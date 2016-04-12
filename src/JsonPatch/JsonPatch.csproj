@@ -56,6 +56,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Formatting\JsonPatchFormatter.cs" />
     <Compile Include="JsonPatchSettings.cs" />
+    <Compile Include="Paths\Components\CollectionPathComponent.cs" />
     <Compile Include="Paths\Components\CollectionIndexPathComponent.cs" />
     <Compile Include="Paths\Components\PathComponent.cs" />
     <Compile Include="Paths\PathHelper.cs" />
