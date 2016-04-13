@@ -28,5 +28,13 @@ namespace JsonPatch.Paths.Components
         {
             return "/" + string.Join("/", pathComponents.Select(p => p.Name));
         }
+
+        public bool IsDictionary
+        {
+            get
+            {
+                return typeof (IDictionary).IsAssignableFrom(ComponentType);
+            }
+        }
     }
 }
