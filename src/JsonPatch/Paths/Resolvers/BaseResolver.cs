@@ -32,6 +32,16 @@ namespace JsonPatch.Paths.Resolvers
                 throw new JsonPatchParseException("Path component may not be empty.");
             }
 
+            // If previous component was a dictionary then this component is a dictionary key
+            if (previous?.IsDictionary == true)
+            {
+                return new DictionaryPathComponent(component)
+                {
+                    ComponentType = GetDictionaryValueType(previous.ComponentType),
+                    Key = ConvertValue(component, GetDictionaryKeyType(previous.ComponentType))
+                };
+            }
+
             // If the path component is a positive integer, it represents a collection index.
             if (component.IsPositiveInteger())
             {
@@ -93,6 +103,16 @@ namespace JsonPatch.Paths.Resolvers
             {
                 ComponentType = property.PropertyType
             };
+        }
+
+        private Type GetDictionaryValueType(Type entityType)
+        {
+            return entityType.GetGenericArguments().Skip(1).First();
+        }
+
+        private Type GetDictionaryKeyType(Type entityType)
+        {
+            return entityType.GetGenericArguments().First();
         }
 
         public PathComponent[] ParsePath(string path, Type entityType)
@@ -158,6 +178,20 @@ namespace JsonPatch.Paths.Resolvers
 
                             previous = component.GetPropertyInfo(previous).GetValue(previous);
                         })
+                        .Case((DictionaryPathComponent component) =>
+                        {
+                            try
+                            {
+                                var dictionary = (IDictionary) previous;
+                                previous = dictionary[component.Key];
+                            }
+                            catch (Exception e)
+                            {
+                                throw new JsonPatchException(string.Format(
+                                    "Cannot access object by key {0} from dictionary at path \"{1}\".",
+                                    component.Key, parentPath), e);
+                            }
+                        })
                         .Case((CollectionIndexPathComponent component) =>
                         {
                             try
@@ -216,10 +250,10 @@ namespace JsonPatch.Paths.Resolvers
                                 throw new ArgumentOutOfRangeException("operationType");
                         }
                     })
-                    .Case((CollectionPathComponent component) =>
+                    .Case((DictionaryPathComponent component) =>
                     {
-                        var list = previous as IList;
-                        if (list == null)
+                        var dictionary = previous as IDictionary;
+                        if (dictionary == null)
                         {
                             throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
                         }
@@ -227,7 +261,13 @@ namespace JsonPatch.Paths.Resolvers
                         switch (operationType)
                         {
                             case JsonPatchOperationType.add:
-                                list.Add(ConvertValue(value, component.ComponentType));
+                                dictionary.Add(component.Key, ConvertValue(value, component.ComponentType));
+                                break;
+                            case JsonPatchOperationType.remove:
+                                dictionary.Remove(component.Key);
+                                break;
+                            case JsonPatchOperationType.replace:
+                                dictionary[component.Key] = ConvertValue(value, component.ComponentType);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException("operationType");
