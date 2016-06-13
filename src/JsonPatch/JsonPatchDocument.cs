@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using JsonPatch.Paths;
 
 namespace JsonPatch
 {
-    public class JsonPatchDocument<TEntity> : IJsonPatchDocument where TEntity : class, new()
+    public class JsonPatchDocument<TEntity> : IJsonPatchDocument where TEntity : class
     {
         private List<JsonPatchOperation> _operations = new List<JsonPatchOperation>();
 
