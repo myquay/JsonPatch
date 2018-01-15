@@ -8,7 +8,7 @@ You can get it on NuGet here: https://www.nuget.org/packages/JsonPatch/
 Usage
 =========
 
-##Step 1: Install the formatter
+## Step 1: Install the formatter
 
 
 ```C#
@@ -18,7 +18,7 @@ public static void ConfigureApis(HttpConfiguration config)
 }
 ```
 
-##Step 2: Profit??
+## Step 2: Profit??
 
 ```C#
 public void Patch(Guid id, JsonPatchDocument<SomeDto> patchData)
@@ -30,7 +30,7 @@ public void Patch(Guid id, JsonPatchDocument<SomeDto> patchData)
 }
 ```
 
-##Making a PATCH request
+## Making a PATCH request
 
 The main thing is to make sure the content type is "application/json-patch+json" otherwise Web API won't invoke the JsonPatch media formatter. Here's an example.
 
@@ -42,7 +42,7 @@ The main thing is to make sure the content type is "application/json-patch+json"
         { "op": "add", "path": "/a/b/c", "value": "foo" }
     ]
 
-##Options
+## Options
 
 The path specified in the patch request can be resolved to a different property on the model using a resolver.
 
