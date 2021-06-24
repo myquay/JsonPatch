@@ -145,6 +145,34 @@ namespace JsonPatch.Tests
 
         #endregion
 
+        #region JsonPatch Test Tests
+
+        [TestMethod]
+        public void Test_ValidPath_OperationAdded()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Act
+            patchDocument.Test("Foo", "bar");
+
+            //Assert
+            Assert.AreEqual(1, patchDocument.Operations.Count);
+            Assert.AreEqual(JsonPatchOperationType.test, patchDocument.Operations.Single().Operation);
+        }
+
+        [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
+        public void Test_InvalidPath_ThrowsJsonPatchParseException()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+
+            //Act
+            patchDocument.Test("FooMissing", "bar");
+        }
+
+        #endregion
+
         #region JsonPatch ApplyUpdatesTo Tests
 
         #region Add Operation
@@ -306,6 +334,42 @@ namespace JsonPatch.Tests
 
         #endregion
 
+        #region Test Operation
+
+        [TestMethod]
+        public void ApplyUpdate_TestOperation_ConditionPassed_EntityUpdated()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+            var entity = new SimpleEntity { Foo = "bar" };
+
+            //Act
+            patchDocument.Test("Foo", "bar");
+            patchDocument.Replace("Foo", "baz");
+            patchDocument.ApplyUpdatesTo(entity);
+
+            //Assert
+            Assert.AreEqual("baz", entity.Foo);
+        }
+
+        [TestMethod]
+        public void ApplyUpdate_TestOperation_ConditionFailed_EntityNotUpdated()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<SimpleEntity>();
+            var entity = new SimpleEntity { Foo = "not bar" };
+
+            //Act
+            patchDocument.Test("Foo", "bar");
+            patchDocument.Replace("Foo", "baz");
+            patchDocument.ApplyUpdatesTo(entity);
+
+            //Assert
+            Assert.AreNotEqual("baz", entity.Foo);
+        }
+
+        #endregion
+
         #endregion
 
         #region JsonPatch HasOperations Tests
@@ -358,5 +422,6 @@ namespace JsonPatch.Tests
             Assert.IsTrue(patchDocument.HasOperations);
         }
         #endregion
+
     }
 }
