@@ -1,8 +1,8 @@
-﻿using System;
+﻿using JsonPatch.Common.Paths.Components;
+using System;
 
-using JsonPatch.Paths.Components;
 
-namespace JsonPatch.Paths.Resolvers
+namespace JsonPatch.Common.Paths.Resolvers
 {
     public interface IPathResolver
     {

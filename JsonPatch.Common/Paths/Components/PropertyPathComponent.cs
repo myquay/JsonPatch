@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace JsonPatch.Paths.Components
+namespace JsonPatch.Common.Paths.Components
 {
     public class PropertyPathComponent : PathComponent
     {

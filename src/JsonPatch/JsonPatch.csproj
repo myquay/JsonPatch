@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>JsonPatch</RootNamespace>
     <AssemblyName>JsonPatch</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\ConceptHQ\Raptor\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,36 +51,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Helpers\TypeSwitch.cs" />
-    <Compile Include="JsonPatchParseException.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Formatting\JsonPatchFormatter.cs" />
     <Compile Include="JsonPatchSettings.cs" />
-    <Compile Include="Paths\Components\DictionaryPathComponent.cs" />
-    <Compile Include="Paths\Components\CollectionPathComponent.cs" />
-    <Compile Include="Paths\Components\CollectionIndexPathComponent.cs" />
-    <Compile Include="Paths\Components\PathComponent.cs" />
-    <Compile Include="Paths\PathHelper.cs" />
     <Compile Include="IJsonPatchDocument.cs" />
     <Compile Include="JsonPatchDocument.cs" />
     <Compile Include="JsonPatchOperation.cs" />
-    <Compile Include="JsonPatchOperationType.cs" />
-    <Compile Include="JsonPatchException.cs" />
     <Compile Include="Model\PatchOperation.cs" />
-    <Compile Include="Paths\Components\PropertyPathComponent.cs" />
-    <Compile Include="Paths\Resolvers\AttributePropertyPathResolver.cs" />
-    <Compile Include="Paths\Resolvers\BaseResolver.cs" />
-    <Compile Include="Paths\Resolvers\CaseInsensitivePropertyPathResolver.cs" />
-    <Compile Include="Paths\Resolvers\ExactCasePropertyPathResolver.cs" />
-    <Compile Include="Paths\Resolvers\FlexiblePathResolver.cs" />
-    <Compile Include="Paths\Resolvers\IPathResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\JsonPatch.Common\JsonPatch.Common.csproj">
+      <Project>{577d7c0e-32d9-4c88-8c93-74794daec76c}</Project>
+      <Name>JsonPatch.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

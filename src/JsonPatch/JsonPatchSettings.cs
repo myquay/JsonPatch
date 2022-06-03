@@ -1,4 +1,4 @@
-﻿using JsonPatch.Paths.Resolvers;
+﻿using JsonPatch.Common.Paths.Resolvers;
 
 namespace JsonPatch
 {

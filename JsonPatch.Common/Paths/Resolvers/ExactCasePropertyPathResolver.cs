@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace JsonPatch.Paths.Resolvers
+namespace JsonPatch.Common.Paths.Resolvers
 {
     /// <summary>
     /// Implementation of path resolver that will only match on exact case

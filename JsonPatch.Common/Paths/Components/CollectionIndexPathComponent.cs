@@ -1,4 +1,4 @@
-﻿namespace JsonPatch.Paths.Components
+﻿namespace JsonPatch.Common.Paths.Components
 {
     public class CollectionIndexPathComponent : PathComponent
     {

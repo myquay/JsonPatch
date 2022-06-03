@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JsonPatch.Paths.Resolvers
+namespace JsonPatch.Common.Paths.Resolvers
 {
     public class FlexiblePathResolver : BaseResolver
     {

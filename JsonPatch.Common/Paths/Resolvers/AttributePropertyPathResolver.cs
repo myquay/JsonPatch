@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace JsonPatch.Paths.Resolvers
+namespace JsonPatch.Common.Paths.Resolvers
 {
     public class AttributePropertyPathResolver : BaseResolver
     {
@@ -25,9 +25,9 @@ namespace JsonPatch.Paths.Resolvers
 
             return parentType.GetProperties().FirstOrDefault(p =>
             {
-                var jsonProperty = p.GetCustomAttributes<JsonPropertyAttribute>().FirstOrDefault();
+                var jsonProperty = p.GetCustomAttributes<JsonPropertyNameAttribute>().FirstOrDefault();
                 if (jsonProperty == null) return false;
-                return string.Equals(jsonProperty.PropertyName, component);
+                return string.Equals(jsonProperty.Name, component);
             });
         }
     }

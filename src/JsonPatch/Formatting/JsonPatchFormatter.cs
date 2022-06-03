@@ -1,4 +1,5 @@
-﻿using JsonPatch.Model;
+﻿using JsonPatch.Common;
+using JsonPatch.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

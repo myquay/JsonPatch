@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JsonPatch.Extensions
+namespace JsonPatch.Common.Extensions
 {
     internal static class StringExtensions
     {
