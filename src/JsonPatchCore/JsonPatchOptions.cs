@@ -8,7 +8,7 @@ namespace JsonPatchCore;
 /// </summary>
 public record JsonPatchOptions
 {
-    public IPathResolver PathResolver { get; set; } = new CaseInsensitivePropertyPathResolver();
+    public IPathResolver PathResolver { get; set; } = new CaseInsensitivePropertyPathResolver(new JsonValueConverter());
 
     public bool RequireJsonPatchContentType { get; set; } = true;
 

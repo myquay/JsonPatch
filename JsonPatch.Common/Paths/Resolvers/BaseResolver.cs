@@ -5,13 +5,19 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace JsonPatch.Common.Paths.Resolvers
 {
     public abstract class BaseResolver : IPathResolver
     {
+
+        private readonly IValueConverter converter;
+
+        public BaseResolver(IValueConverter converter)
+        {
+            this.converter = converter;
+        }
+
         internal abstract PropertyInfo GetProperty(Type parentType, string component);
 
         protected string[] GetPathComponents(string path)
@@ -322,12 +328,12 @@ namespace JsonPatch.Common.Paths.Resolvers
             }
         }
 
-        private static Type GetCollectionType(Type entityType)
+        private Type GetCollectionType(Type entityType)
         {
             return entityType.GetElementType() ?? entityType.GetGenericArguments().First();
         }
 
-        private static object ConvertValue(object value, Type type)
+        private object ConvertValue(object value, Type type)
         {
             if (type.IsEnum)
             {
@@ -335,7 +341,7 @@ namespace JsonPatch.Common.Paths.Resolvers
             }
             else
             {
-                return JsonSerializer.Deserialize(JsonSerializer.Serialize(value), type);
+                return converter.ConvertTo(value, type);
             }
         }
     }

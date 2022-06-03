@@ -13,7 +13,7 @@ namespace JsonPatch
         {
             return new JsonPatchSettings
             {
-                PathResolver = new ExactCasePropertyPathResolver()
+                PathResolver = new ExactCasePropertyPathResolver(new JsonValueConverter())
             };
         }
     }

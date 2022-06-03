@@ -9,13 +9,20 @@ namespace JsonPatch.Common.Paths.Resolvers
 {
     public class FlexiblePathResolver : BaseResolver
     {
+        private IValueConverter converter;
+
+        public FlexiblePathResolver(IValueConverter converter) : base(converter)
+        {
+            this.converter = converter;
+        }
+
         internal override PropertyInfo GetProperty(Type parentType, string component)
         {
-            var property = new AttributePropertyPathResolver().GetProperty(parentType, component);
+            var property = new AttributePropertyPathResolver(converter).GetProperty(parentType, component);
             if (property == null)
-                property = new ExactCasePropertyPathResolver().GetProperty(parentType, component);
+                property = new ExactCasePropertyPathResolver(converter).GetProperty(parentType, component);
             if (property == null)
-                property = new CaseInsensitivePropertyPathResolver().GetProperty(parentType, component);
+                property = new CaseInsensitivePropertyPathResolver(converter).GetProperty(parentType, component);
             return property;
         }
     }
