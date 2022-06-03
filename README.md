@@ -1,34 +1,27 @@
 JsonPatch
 =========
 
-JsonPatch is a simple library which adds JSON Patch support to ASP.NET Web API (http://tools.ietf.org/html/rfc6902).
+JsonPatch is a simple library which adds JSON Patch support to .NET 6 - ASP.NET Core Minimal Web API (http://tools.ietf.org/html/rfc6902).
 
 You can get it on NuGet here: https://www.nuget.org/packages/JsonPatch/
 
 Usage
 =========
 
-## Step 1: Install the formatter
-
-
-```C#
-public static void ConfigureApis(HttpConfiguration config)
-{
-    config.Formatters.Add(new JsonPatchFormatter());
-}
-```
-
-## Step 2: Profit??
+## Step 1: Specify the Patch Document
 
 ```C#
-public void Patch(Guid id, JsonPatchDocument<SomeDto> patchData)
+
+endpoints.MapMethods("/some-resource/{id}", new[] { "PATCH" }, async (Guid id, JsonPatchDocument<SomeDto> model) =>
 {
     //Remember to do some validation and all that fun stuff
     var objectToUpdate = repository.GetById(id);
-    patchData.ApplyUpdatesTo(objectToUpdate);
-    repository.Save(objectToUpdate);
-}
+    repository.Save(patchData.ApplyTo(objectToUpdate));
+});
+
 ```
+
+Yep - that's it. You can now use PATCH on your flash new Minimal API (https://docs.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-6.0)
 
 ## Making a PATCH request
 
@@ -46,16 +39,16 @@ The main thing is to make sure the content type is "application/json-patch+json"
 
 The path specified in the patch request can be resolved to a different property on the model using a resolver.
 
-E.g. the FlexiblePathResolver will match a property based on
-* The JsonProperty attribute
-* The DataMember attribute
-* The Property Name (Case Insensitive)
+E.g. the ExactCasePropertyPathResolver will match a property based on an exact match
 
 ```C#
-config.Formatters.Add(new JsonPatchFormatter(new JsonPatchSettings
+
+JsonPatchSettings.Options = new JsonPatchOptions
 {
-     PathResolver = new FlexiblePathResolver()
-}));
+    PathResolver = new ExactCasePropertyPathResolver(new JsonValueConverter()),
+    RequireJsonPatchContentType = false,
+};
+
 ```
 
 Now the request 
@@ -68,7 +61,7 @@ Now the request
         { "op": "add", "path": "/sampleProperty", "value": "foo" }
     ]
     
-Will be valid for the class
+Will be no longer be valid for the class
 
     {
         [JsonProperty("sampleProperty")]
@@ -76,10 +69,12 @@ Will be valid for the class
     }
 
 Available resolvers are
-* ExactCasePropertyPathResolver *(default for backwards compatibility)*
+* ExactCasePropertyPathResolver
 * CaseInsensitivePropertyPathResolver
 * AttributePropertyPathResolver
 * FlexiblePathResolver
+
+You can add your own by extending BaseResolver and defining how to get the property from the type. 
 
 Notes
 =========
