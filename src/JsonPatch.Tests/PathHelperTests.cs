@@ -1,11 +1,12 @@
 ﻿using System;
-using JsonPatch.Paths;
-using JsonPatch.Paths.Components;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using JsonPatch.Tests.Entitys;
 using System.Collections.Generic;
 using JsonPatch.Formatting;
-using JsonPatch.Paths.Resolvers;
+using JsonPatch.Common.Paths.Resolvers;
+using JsonPatch.Common.Paths;
+using JsonPatch.Common;
+using JsonPatch.Common.Paths.Components;
 
 namespace JsonPatch.Tests
 {
@@ -13,19 +14,7 @@ namespace JsonPatch.Tests
     public class PathHelperTests
     {
 
-        private ExactCasePropertyPathResolver _resolver;
-
-        [TestInitialize]
-        public void SetResolver()
-        {
-            _resolver = new ExactCasePropertyPathResolver();
-            var settings = new JsonPatchSettings
-            {
-                PathResolver = _resolver
-            };
-
-            var formatter = new JsonPatchFormatter(settings);
-        }
+        private readonly IPathResolver _resolver = new ExactCasePropertyPathResolver(new JsonValueConverter());
 
         #region ParsePath
 
@@ -33,7 +22,7 @@ namespace JsonPatch.Tests
         public void ParsePath_SimpleProperty_ParsesSuccessfully()
         {
             //act
-            var pathComponents = PathHelper.ParsePath("Bar", typeof(SimpleEntity));
+            var pathComponents = _resolver.ParsePath("Bar", typeof(SimpleEntity));
 
             //assert
             Assert.AreEqual(1, pathComponents.Length);
@@ -47,14 +36,14 @@ namespace JsonPatch.Tests
         public void ParsePath_SimpleProperty_ParsesFails()
         {
             //act
-            var pathComponents = PathHelper.ParsePath("bar", typeof(SimpleEntity));
+            var pathComponents = _resolver.ParsePath("bar", typeof(SimpleEntity));
         }
 
         [TestMethod]
         public void ParsePath_LeadingSlash_SlashIgnored()
         {
             //act
-            var pathComponents = PathHelper.ParsePath("/Foo", typeof(SimpleEntity));
+            var pathComponents = _resolver.ParsePath("/Foo", typeof(SimpleEntity));
 
             //assert
             Assert.AreEqual(1, pathComponents.Length);
@@ -65,7 +54,7 @@ namespace JsonPatch.Tests
         public void ParsePath_LeadingAndTrailingSlashes_SlashesIgnored()
         {
             //act
-            var pathComponents = PathHelper.ParsePath("/Foo/", typeof(SimpleEntity));
+            var pathComponents = _resolver.ParsePath("/Foo/", typeof(SimpleEntity));
 
             //assert
             Assert.AreEqual(1, pathComponents.Length);
@@ -76,21 +65,21 @@ namespace JsonPatch.Tests
         public void ParsePath_InvalidProperty_ThrowsException()
         {
             //act
-            PathHelper.ParsePath("Quux", typeof(SimpleEntity));
+            _resolver.ParsePath("Quux", typeof(SimpleEntity));
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
         public void ParsePath_EmptyPath_ThrowsException()
         {
             //act
-            PathHelper.ParsePath("", typeof(SimpleEntity));
+            _resolver.ParsePath("", typeof(SimpleEntity));
         }
 
         [TestMethod]
         public void ParsePath_CollectionIndex_ParsesSuccessfully()
         {
             //act
-            var pathComponents = PathHelper.ParsePath("/Foo/5", typeof(ListEntity));
+            var pathComponents = _resolver.ParsePath("/Foo/5", typeof(ListEntity));
 
             //assert
             Assert.AreEqual(2, pathComponents.Length);
@@ -106,7 +95,7 @@ namespace JsonPatch.Tests
         public void ParsePath_CollectionAdd_ParsesSuccessfully()
         {
             //act
-            var pathComponents = PathHelper.ParsePath("/Foo/-", typeof(ListEntity));
+            var pathComponents = _resolver.ParsePath("/Foo/-", typeof(ListEntity));
 
             //assert
             Assert.AreEqual(2, pathComponents.Length);
@@ -121,7 +110,7 @@ namespace JsonPatch.Tests
         public void ParsePath_CollectionIndexAfterNonCollectionProperty_ParsesSuccessfully()
         {
             //act
-            PathHelper.ParsePath("/Bar/5", typeof(SimpleEntity));
+            _resolver.ParsePath("/Bar/5", typeof(SimpleEntity));
         }
 
         #endregion
@@ -134,7 +123,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_BlankPath_ReturnsFalse()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(SimpleEntity), "");
+            var isValid = _resolver.IsPathValid(typeof(SimpleEntity), "");
 
             //assert
             Assert.IsTrue(isValid == false);
@@ -144,7 +133,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_NullPath_ReturnsFalse()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(SimpleEntity), null);
+            var isValid = _resolver.IsPathValid(typeof(SimpleEntity), null);
 
             //assert
             Assert.IsTrue(isValid == false);
@@ -154,7 +143,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_PathBeginningWithANumber_ReturnsFalse()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(SimpleEntity), "/8/Foo");
+            var isValid = _resolver.IsPathValid(typeof(SimpleEntity), "/8/Foo");
 
             //assert
             Assert.IsTrue(isValid == false);
@@ -164,7 +153,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_PathWithEmptyComponent_ReturnsFalse()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(SimpleEntity), "//");
+            var isValid = _resolver.IsPathValid(typeof(SimpleEntity), "//");
 
             //assert
             Assert.IsTrue(isValid == false);
@@ -178,7 +167,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_SimpleMissingPath_ReturnsFalse()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(SimpleEntity), "/MissingFoo");
+            var isValid = _resolver.IsPathValid(typeof(SimpleEntity), "/MissingFoo");
 
             //assert
             Assert.IsTrue(isValid == false);
@@ -188,7 +177,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_NonIndexOnArray_ReturnsFalse()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ArrayEntity), "/Foo/NotAnIndex");
+            var isValid = _resolver.IsPathValid(typeof(ArrayEntity), "/Foo/NotAnIndex");
 
             //assert
             Assert.IsTrue(isValid == false);
@@ -198,7 +187,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_MissingPathOnChildEntity_ReturnsFalse()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Bax/1/MissingFoo");
+            var isValid = _resolver.IsPathValid(typeof(ComplexEntity), "/Bax/1/MissingFoo");
 
             //assert
             Assert.IsTrue(isValid == false);
@@ -208,7 +197,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_ChildIndexerOnNonArray_ReturnsFalse()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Baz/1/1");
+            var isValid = _resolver.IsPathValid(typeof(ComplexEntity), "/Baz/1/1");
 
             //assert
             Assert.IsTrue(isValid == false);
@@ -222,7 +211,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_SimplePath_ReturnsTrue()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(SimpleEntity), "/Foo");
+            var isValid = _resolver.IsPathValid(typeof(SimpleEntity), "/Foo");
 
             //assert
             Assert.IsTrue(isValid);
@@ -232,7 +221,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_ArrayPath_ReturnsTrue()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ArrayEntity), "/Foo/3");
+            var isValid = _resolver.IsPathValid(typeof(ArrayEntity), "/Foo/3");
 
             //assert
             Assert.IsTrue(isValid);
@@ -242,7 +231,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_PathOnArrayEntity_ReturnsTrue()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ArrayEntity), "/Foo/3");
+            var isValid = _resolver.IsPathValid(typeof(ArrayEntity), "/Foo/3");
 
             //assert
             Assert.IsTrue(isValid);
@@ -252,7 +241,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_ChildPathOnArray_ReturnsTrue()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Baz/1/Foo");
+            var isValid = _resolver.IsPathValid(typeof(ComplexEntity), "/Baz/1/Foo");
 
             //assert
             Assert.IsTrue(isValid);
@@ -262,7 +251,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_ChildPathOnList_ReturnsTrue()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Qux/1/Foo");
+            var isValid = _resolver.IsPathValid(typeof(ComplexEntity), "/Qux/1/Foo");
 
             //assert
             Assert.IsTrue(isValid);
@@ -272,7 +261,7 @@ namespace JsonPatch.Tests
         public void IsPathValid_PathOnChildArray_ReturnsTrue()
         {
             //act
-            var isValid = PathHelper.IsPathValid(typeof(ComplexEntity), "/Foo/Foo/1");
+            var isValid = _resolver.IsPathValid(typeof(ComplexEntity), "/Foo/Foo/1");
 
             //assert
             Assert.IsTrue(isValid);
@@ -296,7 +285,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            var value = PathHelper.GetValueFromPath(typeof(SimpleEntity), "/Foo", entity);
+            var value = _resolver.GetValueFromPath(typeof(SimpleEntity), "/Foo", entity);
 
             //assert
             Assert.AreEqual("I am foo", value);
@@ -306,7 +295,7 @@ namespace JsonPatch.Tests
         public void GetValueFromPath_NullRoot_ThrowsException()
         {
             //act
-            PathHelper.GetValueFromPath(typeof(SimpleEntity), "/Foo", null);
+            _resolver.GetValueFromPath(typeof(SimpleEntity), "/Foo", null);
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchParseException))]
@@ -319,7 +308,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.GetValueFromPath(typeof(SimpleEntity), "/FooMissing", entity);
+            _resolver.GetValueFromPath(typeof(SimpleEntity), "/FooMissing", entity);
         }
 
         #endregion
@@ -336,7 +325,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            var value = PathHelper.GetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity);
+            var value = _resolver.GetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity);
 
             //Assert
             Assert.AreEqual("Element Two", value);
@@ -352,7 +341,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.GetValueFromPath(typeof(ArrayEntity), "/Foo/5", entity);
+            _resolver.GetValueFromPath(typeof(ArrayEntity), "/Foo/5", entity);
         }
 
         #endregion
@@ -372,7 +361,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            var value = PathHelper.GetValueFromPath(typeof(ComplexEntity), "/Bar/Foo", entity);
+            var value = _resolver.GetValueFromPath(typeof(ComplexEntity), "/Bar/Foo", entity);
 
             //assert
             Assert.AreEqual("I am foo", value);
@@ -392,7 +381,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            var value = PathHelper.GetValueFromPath(typeof(ComplexEntity), "/Norf/1/Foo/2", entity);
+            var value = _resolver.GetValueFromPath(typeof(ComplexEntity), "/Norf/1/Foo/2", entity);
 
             //assert
             Assert.AreEqual("B3", value);
@@ -405,7 +394,7 @@ namespace JsonPatch.Tests
             var entity = new ComplexEntity { };
 
             //act
-            PathHelper.GetValueFromPath(typeof(ComplexEntity), "/Bar/Foo", entity);
+            _resolver.GetValueFromPath(typeof(ComplexEntity), "/Bar/Foo", entity);
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchException))]
@@ -422,7 +411,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.GetValueFromPath(typeof(ComplexEntity), "/Qux/5/Foo", entity);
+            _resolver.GetValueFromPath(typeof(ComplexEntity), "/Qux/5/Foo", entity);
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchException))]
@@ -435,7 +424,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.GetValueFromPath(typeof(ComplexEntity), "/Norf/0/Foo/0", entity);
+            _resolver.GetValueFromPath(typeof(ComplexEntity), "/Norf/0/Foo/0", entity);
         }
 
         #endregion
@@ -450,7 +439,7 @@ namespace JsonPatch.Tests
         public void SetValueFromPath_InvalidPath_ThrowsException()
         {
             //act
-            PathHelper.SetValueFromPath(typeof(SimpleEntity), "",  new SimpleEntity { }, null, JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(SimpleEntity), "",  new SimpleEntity { }, null, JsonPatchOperationType.add);
         }
 
         [TestMethod]
@@ -460,7 +449,7 @@ namespace JsonPatch.Tests
             var entity = new SimpleEntity { };
 
             //act
-            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual("New Value", entity.Foo);
@@ -473,7 +462,7 @@ namespace JsonPatch.Tests
             var entity = new SimpleEntity { Foo = "Existing Value" };
 
             //act
-            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual("New Value", entity.Foo);
@@ -486,7 +475,7 @@ namespace JsonPatch.Tests
             var entity = new SimpleEntity { };
 
             //act
-            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.replace);
 
             //assert
             Assert.AreEqual("New Value", entity.Foo);
@@ -499,7 +488,7 @@ namespace JsonPatch.Tests
             var entity = new SimpleEntity { Foo = "Existing Value" };
 
             //act
-            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.replace);
             
             //assert
             Assert.AreEqual("New Value", entity.Foo);
@@ -512,7 +501,7 @@ namespace JsonPatch.Tests
             var entity = new SimpleEntity { };
 
             //act
-            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, null, JsonPatchOperationType.remove);
 
             //assert
             Assert.AreEqual(null, entity.Foo);
@@ -525,7 +514,7 @@ namespace JsonPatch.Tests
             var entity = new SimpleEntity { Foo = "Existing Value" };
 
             //act
-            PathHelper.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, null, JsonPatchOperationType.remove);
 
             //assert
             Assert.AreEqual(null, entity.Foo);
@@ -547,7 +536,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
 
             //Assert
             Assert.AreEqual("Element Two Updated", entity.Foo[1]);
@@ -564,7 +553,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.replace);
 
             //Assert
             Assert.AreEqual("Element Two Updated", entity.Foo[1]);
@@ -581,7 +570,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchException))]
@@ -594,7 +583,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, "Element Three", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, "Element Three", JsonPatchOperationType.add);
 
             // Arrays should not support resizing. Expect JsonPatchException with an inner exception of type
             // NotSupportedException: Collection was of a fixed size.
@@ -610,7 +599,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, null, JsonPatchOperationType.remove);
 
             // Arrays should not support resizing. Expect JsonPatchException with an inner exception of type
             // NotSupportedException: Collection was of a fixed size
@@ -630,7 +619,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, "Element Two Updated", JsonPatchOperationType.add);
 
             //Assert
             Assert.AreEqual("Element Two Updated", entity.Foo[1]);
@@ -648,7 +637,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/-", entity, "Element Three", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ListEntity), "/Foo/-", entity, "Element Three", JsonPatchOperationType.add);
 
             //Assert
             Assert.AreEqual("Element Three", entity.Foo[2]);
@@ -662,7 +651,7 @@ namespace JsonPatch.Tests
             var entity = new ListEntity();
 
             //act
-            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/0", entity, "Element One", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ListEntity), "/Foo/0", entity, "Element One", JsonPatchOperationType.add);
         }
 
         [TestMethod]
@@ -675,7 +664,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ListEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.add);
 
             //Assert
             Assert.AreEqual("Element Two Updated", entity.Foo[2]);
@@ -693,7 +682,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/0", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(ListEntity), "/Foo/0", entity, null, JsonPatchOperationType.remove);
 
             //Assert
             Assert.AreEqual("Element Two", entity.Foo[0]);
@@ -710,7 +699,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(ListEntity), "/Foo/1", entity, null, JsonPatchOperationType.remove);
 
             //Assert
             Assert.AreEqual("Element One", entity.Foo[0]);
@@ -728,7 +717,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ListEntity), "/Foo/2", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(ListEntity), "/Foo/2", entity, null, JsonPatchOperationType.remove);
         }
 
         #endregion
@@ -745,7 +734,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(DictionaryEntity<string>), "/Foo/key1", entity, "Element One Updated", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<string>), "/Foo/key1", entity, "Element One Updated", JsonPatchOperationType.replace);
 
             //Assert
             Assert.AreEqual("Element One Updated", entity.Foo["key1"]);
@@ -763,7 +752,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
 
             //Assert
             Assert.AreEqual("Element Two Updated", entity.Foo[2]);
@@ -781,7 +770,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/3", entity, "Element Three", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/3", entity, "Element Three", JsonPatchOperationType.add);
 
             //Assert
             Assert.AreEqual("Element Three", entity.Foo[3]);
@@ -798,7 +787,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/2", entity, "Element Three", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/2", entity, "Element Three", JsonPatchOperationType.add);
         }
 
         [TestMethod]
@@ -811,7 +800,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/2", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/2", entity, null, JsonPatchOperationType.remove);
 
             //Assert
             Assert.IsFalse(entity.Foo.ContainsKey(2));
@@ -828,7 +817,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/5", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/5", entity, null, JsonPatchOperationType.remove);
 
             //Assert
             Assert.AreEqual(2, entity.Foo.Count);
@@ -841,7 +830,7 @@ namespace JsonPatch.Tests
             var entity = new DictionaryEntity<int>();
 
             //act
-            PathHelper.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/0", entity, "Element One", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/0", entity, "Element One", JsonPatchOperationType.add);
         }
 
         #endregion
@@ -857,7 +846,7 @@ namespace JsonPatch.Tests
             var entity = new ComplexEntity { Bar = new SimpleEntity() };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Bar/Foo", entity, "New Value", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Bar/Foo", entity, "New Value", JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual("New Value", entity.Bar.Foo);
@@ -870,7 +859,7 @@ namespace JsonPatch.Tests
             var entity = new ComplexEntity { };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Bar/Foo", entity, "New Value", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Bar/Foo", entity, "New Value", JsonPatchOperationType.add);
         }
 
         [TestMethod]
@@ -886,7 +875,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, "New Value", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, "New Value", JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual("New Value", entity.Qux[0].Foo);
@@ -905,7 +894,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, "New Value", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, "New Value", JsonPatchOperationType.replace);
 
             //assert
             Assert.AreEqual("New Value", entity.Qux[0].Foo);
@@ -924,7 +913,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Qux/0/Foo", entity, null, JsonPatchOperationType.remove);
 
             //assert
             Assert.IsNull(entity.Qux[0].Foo);
@@ -943,7 +932,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Qux/1/Foo", entity, "New Value", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Qux/1/Foo", entity, "New Value", JsonPatchOperationType.add);
         }
 
         [TestMethod]
@@ -959,7 +948,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Foo/Foo/0", entity, "Element One - Updated", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Foo/Foo/0", entity, "Element One - Updated", JsonPatchOperationType.replace);
 
             //assert
             Assert.AreEqual("Element One - Updated", entity.Foo.Foo[0]);
@@ -978,7 +967,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Foo/Foo/1", entity, "New Value", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Foo/Foo/1", entity, "New Value", JsonPatchOperationType.add);
         }
 
         [TestMethod]
@@ -997,7 +986,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Norf/0/Foo/0", entity, "Element One", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Norf/0/Foo/0", entity, "Element One", JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual(1, entity.Norf[0].Foo.Count);
@@ -1019,7 +1008,7 @@ namespace JsonPatch.Tests
             };
 
             // act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Bar", entity, value, JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Bar", entity, value, JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual("I am foo", entity.Bar.Foo);
@@ -1038,7 +1027,7 @@ namespace JsonPatch.Tests
             };
 
             // act
-            PathHelper.SetValueFromPath(typeof(ComplexEntity), "/Foo", entity, value, JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(ComplexEntity), "/Foo", entity, value, JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual(3, entity.Foo.Foo.Length);
@@ -1046,6 +1035,27 @@ namespace JsonPatch.Tests
             Assert.AreEqual("Element Two", entity.Foo.Foo[1]);
             Assert.AreEqual("Element Three", entity.Foo.Foo[2]);
         }
+
+        #region Enums
+
+
+        [TestMethod]
+        public void SetValueForEnum()
+        {
+            //arrange
+            var entity = new EnumEntity
+            {
+                Foo = SampleEnum.FirstEnum
+            };
+
+            //act
+            _resolver.SetValueFromPath(typeof(EnumEntity), "/Foo", entity, "SecondEnum", JsonPatchOperationType.replace);
+
+            //assert
+            Assert.AreEqual(SampleEnum.SecondEnum, entity.Foo);
+        }
+
+        #endregion
 
         #endregion
     }
