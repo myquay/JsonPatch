@@ -18,7 +18,7 @@ public class JsonPatchDocument
 
     public void Remove(string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Remove, path));
 
-    public void Move(string path, string from) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Move, path, FromPath: @from));
+    public void Move(string from, string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Move, path, FromPath: @from));
 }
 
 public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<TEntity> where TEntity : class, new()

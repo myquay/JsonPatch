@@ -31,7 +31,7 @@ public class JsonPatchDocumentJsonConverter : JsonConverter<JsonPatchDocument>
                     result.Remove(operation.path);
                     break;
                 case JsonPatch.Common.Constants.Operations.MOVE:
-                    result.Move(operation.path, operation.from!);
+                    result.Move(operation.from!, operation.path);
                     break;
                 default:
                     throw new NotSupportedException($"{operation.op} not supported");
