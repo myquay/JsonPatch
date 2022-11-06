@@ -1,8 +1,6 @@
-﻿
-namespace JsonPatchCore;
+﻿namespace JsonPatchCore;
 
 public interface IJsonPatchDocument<T> where T : class
 {
-    public T ApplyTo(T entity);
+    T ApplyTo(T entity);
 }
-
