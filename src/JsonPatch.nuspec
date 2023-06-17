@@ -22,6 +22,8 @@
 			  * zihotki (Vasili Puchko)
 			  * nikitasavinov (Nikita)
 			  * denis-tsv (Denis)
+			  * cajonesvu (Chris Jones)
+			  
 		</description>
 		<releaseNotes>
 			Added for support for ASP.NET Core minimal web APIs.
