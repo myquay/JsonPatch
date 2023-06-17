@@ -1,22 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
-    <metadata>
-        <id>JsonPatch</id>
-        <version>1.0.0</version>
-        <title>JsonPatch</title>
-        <authors>Michael McKenna</authors>
-        <owners>Michael McKenna</owners>
-        <licenseUrl>https://github.com/myquay/JsonPatch/blob/master/LICENSE</licenseUrl>
-        <projectUrl>https://github.com/myquay/JsonPatch</projectUrl>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>JsonPatch is a simple library which adds JSON Patch support to ASP.NET Web API</description>
-        <copyright>Copyright 2012-2014  Michael McKenna</copyright>
-        <dependencies>
-            <dependency id="Newtonsoft.Json" version="6.0.5" />
-            <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.0" />
-        </dependencies>
-    </metadata>
-    <files>
-        <file src="JsonPatch\bin\Release\JsonPatch.dll" target="lib\net45\JsonPatch.dll" />
-    </files>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+	<metadata>
+		<id>JsonPatch</id>
+		<version>2.0.1-alpha</version>
+		<title>JsonPatch</title>
+		<authors>Michael McKenna</authors>
+		<owners>Michael McKenna</owners>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<licenseUrl>https://github.com/myquay/JsonPatch/blob/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/myquay/JsonPatch</projectUrl>
+		<description>
+			JsonPatch is a simple library which adds JSON Patch support to ASP.NET Web API and ASP.NET Core Minimal web APIs
+
+			Thank you to all the contributers: 
+			
+			  * tugberkugurlu (Tugberk Ugurlu)
+			  * mindingdata (Wade Gausden)
+			  * donaldgray
+			  * lukas-shawford (Lukas Shawford)
+			  * akozmic (Adam Kozmic)
+			  * zihotki (Vasili Puchko)
+			  * nikitasavinov (Nikita)
+			  * denis-tsv (Denis)
+		</description>
+		<releaseNotes>
+			Added for support for ASP.NET Core minimal web APIs.
+		</releaseNotes>
+		<copyright>Copyright 2012-2023  Michael McKenna</copyright>
+		<dependencies>
+			<group targetFramework="net48">
+				<dependency id="Newtonsoft.Json" version="13.0.1" />
+				<dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.9" />
+			</group>
+		</dependencies>
+		<frameworkReferences>
+			<group targetFramework="net6.0">
+				<dependency name="Microsoft.AspNetCore.App"/>
+			</group>
+		</frameworkReferences>
+	</metadata>
 </package>
