@@ -21,7 +21,7 @@ public class JsonPatchDocument
     public void Move(string from, string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Move, path, FromPath: @from));
 }
 
-public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<TEntity> where TEntity : class, new()
+public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<TEntity> where TEntity : class
 {
     private readonly IPathResolver _resolver = JsonPatchSettings.Options.PathResolver;
 
