@@ -2,10 +2,10 @@
 using JsonPatch.Common.Paths.Resolvers;
 using JsonPatchCore;
 using JsonPatchCore.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using System.Reflection;
 using System.Text.Json;
 using JsonPatch.Common.Model;
+using Microsoft.AspNetCore.Http;
 
 namespace JsonPatchCore;
 

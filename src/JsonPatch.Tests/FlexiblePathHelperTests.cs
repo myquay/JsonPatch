@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using JsonPatch.Tests.Entitys;
+using JsonPatch.Tests.Entities;
 using JsonPatch.Formatting;
 using JsonPatch.Common.Paths.Resolvers;
 using JsonPatch.Common.Paths.Components;

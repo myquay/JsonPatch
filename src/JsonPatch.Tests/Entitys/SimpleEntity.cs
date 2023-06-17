@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace JsonPatch.Tests.Entitys
+namespace JsonPatch.Tests.Entities
 {
     public class SimpleEntity
     {
@@ -17,7 +17,7 @@ namespace JsonPatch.Tests.Entitys
         [DataMember(Name = "pId")]       
         public string ParId { get; set; }
 
-        [JsonProperty("jsonProperty")]
+        [JsonPropertyName("jsonProperty")]
         public string Car { get; set; }
     }
 }

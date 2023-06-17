@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JsonPatch.Tests.Entitys
+namespace JsonPatch.Tests.Entities
 {
 	public class DictionaryEntity<TKey>
 	{

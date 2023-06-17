@@ -1,6 +1,5 @@
 ﻿using JsonPatch.Common;
 using JsonPatch.Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace JsonPatch.Formatting
@@ -55,7 +55,7 @@ namespace JsonPatch.Formatting
                     .Invoke(null);
 
                 var jsonString = reader.ReadToEnd();
-                var operations = JsonConvert.DeserializeObject<PatchOperation[]>(jsonString);
+                var operations = JsonSerializer.Deserialize<PatchOperation[]>(jsonString);
 
                 foreach (var operation in operations)
                 {

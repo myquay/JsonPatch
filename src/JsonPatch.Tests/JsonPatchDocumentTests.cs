@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using JsonPatch.Tests.Entitys;
+using JsonPatch.Tests.Entities;
 using JsonPatch.Common;
 
 namespace JsonPatch.Tests

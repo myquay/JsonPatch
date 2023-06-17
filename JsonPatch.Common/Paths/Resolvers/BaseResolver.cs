@@ -335,14 +335,7 @@ namespace JsonPatch.Common.Paths.Resolvers
 
         private object ConvertValue(object value, Type type)
         {
-            if (type.IsEnum)
-            {
-                return Enum.Parse(type, value.ToString());
-            }
-            else
-            {
-                return converter.ConvertTo(value, type);
-            }
+            return converter.ConvertTo(value, type);
         }
     }
 }

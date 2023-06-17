@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using JsonPatch.Tests.Entitys;
+using JsonPatch.Tests.Entities;
 using JsonPatch.Common.Paths.Resolvers;
 using JsonPatch.Common.Paths.Components;
 using JsonPatch.Common;
@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace JsonPatch.Tests
 {
     [TestClass]
-    public class CaseInsensitiveresolverTests
+    public class CaseInsensitiveResolverTests
     {
         private readonly IPathResolver resolver = new CaseInsensitivePropertyPathResolver(new JsonValueConverter());
 
