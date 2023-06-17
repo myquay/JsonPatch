@@ -14,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonPatchCore", "src\JsonPatchCore\JsonPatchCore.csproj", "{85BC88B3-974A-47B7-9EBF-E6F9A908BD31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonPatch.Common", "JsonPatch.Common\JsonPatch.Common.csproj", "{577D7C0E-32D9-4C88-8C93-74794DAEC76C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonPatch.Common", "JsonPatch.Common\JsonPatch.Common.csproj", "{577D7C0E-32D9-4C88-8C93-74794DAEC76C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonPatchCore.Tests.Api", "src\JsonPatchCore.Tests.Api\JsonPatchCore.Tests.Api.csproj", "{EF766789-277E-4DE9-AFD3-6F4C5170061D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{577D7C0E-32D9-4C88-8C93-74794DAEC76C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{577D7C0E-32D9-4C88-8C93-74794DAEC76C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{577D7C0E-32D9-4C88-8C93-74794DAEC76C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF766789-277E-4DE9-AFD3-6F4C5170061D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF766789-277E-4DE9-AFD3-6F4C5170061D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF766789-277E-4DE9-AFD3-6F4C5170061D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF766789-277E-4DE9-AFD3-6F4C5170061D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
