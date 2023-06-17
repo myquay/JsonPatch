@@ -9,7 +9,7 @@ using JsonPatch.Common.Model;
 
 namespace JsonPatchCore;
 
-public class JsonPatchDocument<TEntity> : IJsonPatchDocument<TEntity> where TEntity : class, new()
+public class JsonPatchDocument<TEntity> : IJsonPatchDocument<TEntity> where TEntity : class
 {
     private readonly List<JsonPatchOperation> _operations = new();
     private readonly IPathResolver resolver = JsonPatchSettings.Options.PathResolver;
