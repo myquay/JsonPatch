@@ -78,7 +78,7 @@ namespace JsonPatch
             {
                 Operation = JsonPatchOperationType.test,
                 Path = path,
-                ParsedPath = PathHelper.ParsePath(path, typeof(TEntity)),
+                ParsedPath = resolver.ParsePath(path, typeof(TEntity)),
                 Value = value
             });
         }
@@ -117,9 +117,9 @@ namespace JsonPatch
             }
         }
 
-        private static bool AreNotEqual(TEntity entity, JsonPatchOperation operation)
+        private bool AreNotEqual(TEntity entity, JsonPatchOperation operation)
         {
-            return PathHelper.GetValueFromPath(typeof(TEntity), operation.ParsedPath, entity) != operation.Value;
+            return resolver.GetValueFromPath(typeof(TEntity), operation.ParsedPath, entity) != operation.Value;
         }
     }
 }
