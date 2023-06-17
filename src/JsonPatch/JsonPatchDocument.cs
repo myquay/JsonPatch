@@ -72,8 +72,25 @@ namespace JsonPatch
             });
         }
 
+        public void Test(string path, object value)
+        {
+            _operations.Add(new JsonPatchOperation
+            {
+                Operation = JsonPatchOperationType.test,
+                Path = path,
+                ParsedPath = PathHelper.ParsePath(path, typeof(TEntity)),
+                Value = value
+            });
+        }
+
         public void ApplyUpdatesTo(TEntity entity)
         {
+            var preconditions = _operations.Where(operation => operation.Operation == JsonPatchOperationType.test);
+            if (preconditions.Any(operation => AreNotEqual(entity, operation)))
+            {
+                return;
+            }
+
             foreach (var operation in _operations)
             {
                 switch (operation.Operation)
@@ -92,10 +109,17 @@ namespace JsonPatch
                         resolver.SetValueFromPath(typeof(TEntity), operation.ParsedFromPath, entity, null, JsonPatchOperationType.remove);
                         resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, value, JsonPatchOperationType.add);
                         break;
+                    case JsonPatchOperationType.test:
+                        break;
                     default:
                         throw new NotSupportedException("Operation not supported: " + operation.Operation);
                 }
             }
+        }
+
+        private static bool AreNotEqual(TEntity entity, JsonPatchOperation operation)
+        {
+            return PathHelper.GetValueFromPath(typeof(TEntity), operation.ParsedPath, entity) != operation.Value;
         }
     }
 }
