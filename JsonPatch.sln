@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonPatch.Tests", "src\Json
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA195012-A5EE-40C1-A756-61CC28176086}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
 		src\JsonPatch.nuspec = src\JsonPatch.nuspec
 	EndProjectSection
 EndProject
@@ -16,7 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonPatchCore", "src\JsonPa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonPatch.Common", "JsonPatch.Common\JsonPatch.Common.csproj", "{577D7C0E-32D9-4C88-8C93-74794DAEC76C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonPatchCore.Tests.Api", "src\JsonPatchCore.Tests.Api\JsonPatchCore.Tests.Api.csproj", "{EF766789-277E-4DE9-AFD3-6F4C5170061D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonPatchCore.Tests.Api", "src\JsonPatchCore.Tests.Api\JsonPatchCore.Tests.Api.csproj", "{EF766789-277E-4DE9-AFD3-6F4C5170061D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{7A26B84A-19A8-4E04-98E6-A6BE1B4442BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{616D4A1B-00DA-48B1-9126-BBCCF24F2AF7}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +55,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7A26B84A-19A8-4E04-98E6-A6BE1B4442BE} = {DA195012-A5EE-40C1-A756-61CC28176086}
+		{616D4A1B-00DA-48B1-9126-BBCCF24F2AF7} = {7A26B84A-19A8-4E04-98E6-A6BE1B4442BE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5D5B09B-A34A-4703-B321-A4E5C9FEB814}

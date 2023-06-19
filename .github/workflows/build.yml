@@ -1,0 +1,17 @@
+﻿name: Build JsonPatch library
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+jobs:
+  build:
+    name: Build JsonPatch library
+    runs-on: windows-latest
+    steps:
+
+    - name: '📄 Checkout'
+      uses: actions/checkout@v3
