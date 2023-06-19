@@ -25,5 +25,11 @@ jobs:
         nuget-api-key: ${{ secrets.NUGET_API_KEY }}
         nuget-version: '5.x'
 
-    - name: 🛠️ Restore NuGet packages
+    - name: 🍎 Restore NuGet packages
       run: nuget restore JsonPatch.sln
+
+    - name: 🚀 Build .NET 4.8 JsonPatch.dll
+      run: msbuild /p:Configuration=Release /p:IncludeSymbols=true src/JsonPatch/JsonPatch.csproj
+
+    - name: 🚀 Build .NET 6 JsonPatchCore.dll
+      run: dotnet build src/JsonPatchCore/JsonPatchCore.csproj --configuration Release

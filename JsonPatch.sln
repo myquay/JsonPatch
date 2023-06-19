@@ -18,13 +18,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonPatch.Common", "JsonPat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonPatchCore.Tests.Api", "src\JsonPatchCore.Tests.Api\JsonPatchCore.Tests.Api.csproj", "{EF766789-277E-4DE9-AFD3-6F4C5170061D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{7A26B84A-19A8-4E04-98E6-A6BE1B4442BE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{616D4A1B-00DA-48B1-9126-BBCCF24F2AF7}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\build.yml = .github\workflows\build.yml
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,10 +47,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{7A26B84A-19A8-4E04-98E6-A6BE1B4442BE} = {DA195012-A5EE-40C1-A756-61CC28176086}
-		{616D4A1B-00DA-48B1-9126-BBCCF24F2AF7} = {7A26B84A-19A8-4E04-98E6-A6BE1B4442BE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5D5B09B-A34A-4703-B321-A4E5C9FEB814}
