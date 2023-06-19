@@ -28,6 +28,16 @@ jobs:
     - name: 🍎 Restore NuGet packages
       run: nuget restore JsonPatch.sln
 
+    - name: 🚀 Build .NET 4.8 JsonPatch.dll Tests
+      run: msbuild /p:Configuration=Release /p:IncludeSymbols=true src/JsonPatch.Tests/JsonPatch.Tests.csproj
+
+    - name: 👟 Run .NET 4.8 JsonPatch.dll Tests
+      uses: microsoft-approved-actions/vstest@master
+      with:
+        testAssembly: JsonPatch.Tests.dll
+        searchFolder: src/JsonPatch.Tests/bin/Release
+        runInParallel: true
+
     - name: 🚀 Build .NET 4.8 JsonPatch.dll
       run: msbuild /p:Configuration=Release /p:IncludeSymbols=true src/JsonPatch/JsonPatch.csproj
 
