@@ -9,7 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonPatch.Tests", "src\Json
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DA195012-A5EE-40C1-A756-61CC28176086}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\build.yml = .github\workflows\build.yml
 		src\JsonPatch.nuspec = src\JsonPatch.nuspec
 	EndProjectSection
 EndProject
