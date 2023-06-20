@@ -1,0 +1,59 @@
+﻿name: Build, Package & Release JsonPatch library
+
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    name: Build JsonPatch library
+    runs-on: windows-latest
+    steps:
+
+    - name: '📄 Checkout'
+      uses: actions/checkout@v3
+
+    - name: 🛠️ Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: 🛠️ Setup NuGet
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+        nuget-version: '5.x'
+
+    - name: 🍎 Restore NuGet packages
+      run: nuget restore JsonPatch.sln
+
+    - name: 🚀 Build .NET 4.8 JsonPatch.dll Tests
+      run: msbuild /p:Configuration=Release /p:IncludeSymbols=true src/JsonPatch.Tests/JsonPatch.Tests.csproj
+
+    - name: 👟 Run .NET 4.8 JsonPatch.dll Tests
+      uses: microsoft/vstest-action@v1.0.0
+      with:
+        testAssembly: JsonPatch.Tests*.dll
+        searchFolder: src/JsonPatch.Tests/bin/Release/
+        runInParallel: true
+
+    - name: 🚀 Build .NET 4.8 JsonPatch.dll
+      run: msbuild /p:Configuration=Release /p:IncludeSymbols=true src/JsonPatch/JsonPatch.csproj
+
+    - name: 🚀 Build .NET 6 JsonPatchCore.dll
+      run: dotnet build src/JsonPatchCore/JsonPatchCore.csproj --configuration Release
+
+    - name: 📄 Copy DLLs and NuSpec to working folder
+      run: |
+          mkdir \pack\json-patch\lib\net6.0
+          mkdir \pack\json-patch\lib\net48
+          copy src\JsonPatch.nuspec \pack\json-patch
+          copy src\JsonPatch\bin\Release\JsonPatch.Common.dll \pack\json-patch\lib\net48
+          copy src\JsonPatch\bin\Release\JsonPatch.Common.pdb \pack\json-patch\lib\net48
+          copy src\JsonPatch\bin\Release\JsonPatch.dll \pack\json-patch\lib\net48
+          copy src\JsonPatch\bin\Release\JsonPatch.pdb \pack\json-patch\lib\net48
+          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatch.Common.dll \pack\json-patch\lib\net6.0
+          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatch.Common.pdb \pack\json-patch\lib\net6.0
+          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.dll \pack\json-patch\lib\net6.0
+          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.pdb \pack\json-patch\lib\net6.0
+          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.xml \pack\json-patch\lib\net6.0
+
+
+
