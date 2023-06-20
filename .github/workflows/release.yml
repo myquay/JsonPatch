@@ -1,9 +1,8 @@
 ﻿name: Build, Package & Release JsonPatch library
 
 on:
-  push:
-    branches:
-    - master
+  release:
+    types: [published]
 jobs:
   build:
     name: Build JsonPatch library
@@ -57,7 +56,7 @@ jobs:
           copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.xml \pack\json-patch\lib\net6.0
 
     - name: 📦 Pack NuGet package
-      run: nuget pack \pack\json-patch\JsonPatch.nuspec -p version=2.0.2-alpha -p releasenotes=test -p commit=${{github.sha}}
+      run: nuget pack \pack\json-patch\JsonPatch.nuspec -p version=${{github.event.release.tag_name}} -p releasenotes=${{github.event.release.body}} -p commit=${{github.sha}}
 
     - name: Archive package
       uses: actions/upload-artifact@v3
