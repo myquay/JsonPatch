@@ -59,5 +59,11 @@ jobs:
     - name: 📦 Pack NuGet package
       run: nuget pack \pack\json-patch\JsonPatch.nuspec -p version=2.0.2-alpha -p releasenotes=test -p commit=${{github.sha}}
 
+    - name: Archive package
+      uses: actions/upload-artifact@v3
+      with:
+        name: nuget-package
+        path: \a\JsonPatch\JsonPatch\JsonPatch.*.nupkg
+
 
 
