@@ -42,8 +42,8 @@ jobs:
 
     - name: 📄 Copy DLLs and NuSpec to working folder
       run: |
-          mkdir \pack\json-patch\lib\net6.0
-          mkdir \pack\json-patch\lib\net48
+          mkdir pack\json-patch\lib\net6.0
+          mkdir pack\json-patch\lib\net48
           copy src\JsonPatch.nuspec \pack\json-patch
           copy src\JsonPatch\bin\Release\JsonPatch.Common.dll \pack\json-patch\lib\net48
           copy src\JsonPatch\bin\Release\JsonPatch.Common.pdb \pack\json-patch\lib\net48
