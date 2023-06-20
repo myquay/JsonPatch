@@ -1,8 +1,9 @@
 ﻿name: Build, Package & Release JsonPatch library
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+    - master
 jobs:
   build:
     name: Build JsonPatch library
