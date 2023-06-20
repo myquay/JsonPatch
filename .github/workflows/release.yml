@@ -43,8 +43,8 @@ jobs:
 
     - name: 📄 Copy DLLs and NuSpec to working folder
       run: |
-          mkdir pack\json-patch\lib\net6.0
-          mkdir pack\json-patch\lib\net48
+          mkdir \pack\json-patch\lib\net6.0
+          mkdir \pack\json-patch\lib\net48
           copy src\JsonPatch.nuspec \pack\json-patch
           copy src\JsonPatch\bin\Release\JsonPatch.Common.dll \pack\json-patch\lib\net48
           copy src\JsonPatch\bin\Release\JsonPatch.Common.pdb \pack\json-patch\lib\net48
@@ -55,6 +55,9 @@ jobs:
           copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.dll \pack\json-patch\lib\net6.0
           copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.pdb \pack\json-patch\lib\net6.0
           copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.xml \pack\json-patch\lib\net6.0
+
+    - name: 📦 Pack NuGet package
+      run: nuget pack \pack\json-patch\JsonPatch.nuspec -p version=2.0.2-alpha -p releasenotes=test -p commit=${{github.sha}}
 
 
 

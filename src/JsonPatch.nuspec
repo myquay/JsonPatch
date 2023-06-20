@@ -14,7 +14,7 @@
 		<description>
 JsonPatch support for ASP.NET Core 6 including support for ASP.NET Minimal APIs. Legacy support for ASP.NET Web API 2 (.NET Framework 4.8).
 
-It uses System.Text.Json for ASP.NET 6 and Newtonsoft.Json for .NET Framework. There are no external dependencies for the .NET 6 version and minimal dependencies for the .NET Framework Version.
+There are no external dependencies for the .NET 6 version and minimal dependencies for the .NET Framework Version.
 
 Thank you to all the contributers:
 
