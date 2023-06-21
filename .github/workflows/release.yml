@@ -66,7 +66,7 @@ jobs:
         path: \a\JsonPatch\JsonPatch\JsonPatch.*.nupkg
 
     - name: 🌐 Push NuGet package live
-      run: nuget push \a\JsonPatch\JsonPatch\JsonPatch.*.nupkg
+      run: nuget push \a\JsonPatch\JsonPatch\JsonPatch.*.nupkg -src https://api.nuget.org/v3/index.json
       shell: powershell
 
 
