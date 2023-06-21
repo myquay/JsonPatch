@@ -56,14 +56,17 @@ jobs:
           copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.xml \pack\json-patch\lib\net6.0
 
     - name: 📦 Pack NuGet package
-      run: nuget pack \pack\json-patch\JsonPatch.nuspec -p version=${{github.event.release.tag_name}} -p releasenotes=@"${{github.event.release.body}}"@ -p commit=${{github.sha}}
+      run: nuget pack \pack\json-patch\JsonPatch.nuspec -p version=${{github.event.release.tag_name}} -p releasenotes="${{github.event.release.body}}" -p commit=${{github.sha}}
       shell: powershell
 
-    - name: Archive package
+    - name: 💾 Archive package
       uses: actions/upload-artifact@v3
       with:
         name: nuget-package
         path: \a\JsonPatch\JsonPatch\JsonPatch.*.nupkg
 
+    - name: 🌐 Push NuGet package live
+      run: nuget push \a\JsonPatch\JsonPatch\JsonPatch.*.nupkg
+      shell: powershell
 
 
