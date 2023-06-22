@@ -89,7 +89,6 @@
     <Compile Include="JsonPatchDocument.cs" />
     <Compile Include="JsonPatchOperation.cs" />
     <Compile Include="JsonValueConverter.cs" />
-    <Compile Include="Model\PatchOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -97,8 +96,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\JsonPatch.Common\JsonPatch.Common.csproj">
-      <Project>{577d7c0e-32d9-4c88-8c93-74794daec76c}</Project>
+    <ProjectReference Include="..\JsonPatch.Common\JsonPatch.Common.csproj">
+      <Project>{c9e7ef1a-8034-454f-9349-610bf69bf91d}</Project>
       <Name>JsonPatch.Common</Name>
     </ProjectReference>
   </ItemGroup>

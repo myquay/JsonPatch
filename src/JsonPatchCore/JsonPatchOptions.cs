@@ -1,15 +1,21 @@
-﻿using JsonPatch.Common.Paths.Resolvers;
-using JsonPatchCore.Infrastructure;
+﻿using JsonPatch.Paths.Resolvers;
+using JsonPatch.Infrastructure;
 
-namespace JsonPatchCore;
+namespace JsonPatch;
 
 /// <summary>
 /// Collection of settings related to JsonPath
 /// </summary>
 public record JsonPatchOptions
 {
+    /// <summary>
+    /// The Path Resolver to use when parsing JsonPath
+    /// </summary>
     public IPathResolver PathResolver { get; set; } = new CaseInsensitivePropertyPathResolver(new JsonValueConverter());
 
+    /// <summary>
+    /// Weather or not to require the Content-Type header to be application/json-patch+json
+    /// </summary>
     public bool RequireJsonPatchContentType { get; set; } = true;
 
 }

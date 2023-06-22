@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using JsonPatch.Common;
-using JsonPatch.Common.Paths;
-using JsonPatch.Common.Paths.Resolvers;
+using JsonPatch;
+using JsonPatch.Paths;
+using JsonPatch.Paths.Resolvers;
 using JsonPatch.Formatting;
 
 namespace JsonPatch
@@ -14,7 +14,7 @@ namespace JsonPatch
     public class JsonPatchDocument<TEntity> : IJsonPatchDocument where TEntity : class, new()
     {
 
-        private IPathResolver resolver
+        private IPathResolver Resolver
         {
             get
             {
@@ -22,7 +22,7 @@ namespace JsonPatch
             }
         }
 
-        private List<JsonPatchOperation> _operations = new List<JsonPatchOperation>();
+        private readonly List<JsonPatchOperation> _operations = new List<JsonPatchOperation>();
 
         public List<JsonPatchOperation> Operations { get { return _operations; } }
 
@@ -34,7 +34,7 @@ namespace JsonPatch
             {
                 Operation = JsonPatchOperationType.add,
                 Path = path,
-                ParsedPath = resolver.ParsePath(path, typeof(TEntity)),
+                ParsedPath = Resolver.ParsePath(path, typeof(TEntity)),
                 Value = value
             });
         }
@@ -45,7 +45,7 @@ namespace JsonPatch
             {
                 Operation = JsonPatchOperationType.replace,
                 Path = path,
-                ParsedPath = resolver.ParsePath(path, typeof(TEntity)),
+                ParsedPath = Resolver.ParsePath(path, typeof(TEntity)),
                 Value = value
             });
         }
@@ -56,7 +56,7 @@ namespace JsonPatch
             {
                 Operation = JsonPatchOperationType.remove,
                 Path = path,
-                ParsedPath = resolver.ParsePath(path, typeof(TEntity))
+                ParsedPath = Resolver.ParsePath(path, typeof(TEntity))
             });
         }
 
@@ -66,9 +66,9 @@ namespace JsonPatch
             {
                 Operation = JsonPatchOperationType.move,
                 FromPath = from,
-                ParsedFromPath = resolver.ParsePath(from, typeof(TEntity)),
+                ParsedFromPath = Resolver.ParsePath(from, typeof(TEntity)),
                 Path = path,
-                ParsedPath = resolver.ParsePath(path, typeof(TEntity)),
+                ParsedPath = Resolver.ParsePath(path, typeof(TEntity)),
             });
         }
 
@@ -78,7 +78,7 @@ namespace JsonPatch
             {
                 Operation = JsonPatchOperationType.test,
                 Path = path,
-                ParsedPath = resolver.ParsePath(path, typeof(TEntity)),
+                ParsedPath = Resolver.ParsePath(path, typeof(TEntity)),
                 Value = value
             });
         }
@@ -96,18 +96,18 @@ namespace JsonPatch
                 switch (operation.Operation)
                 {
                     case JsonPatchOperationType.remove:
-                        resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, null, JsonPatchOperationType.remove);
+                        Resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, null, JsonPatchOperationType.remove);
                         break;
                     case JsonPatchOperationType.replace:
-                        resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, operation.Value, JsonPatchOperationType.replace);
+                        Resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, operation.Value, JsonPatchOperationType.replace);
                         break;
                     case JsonPatchOperationType.add:
-                        resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, operation.Value, JsonPatchOperationType.add);
+                        Resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, operation.Value, JsonPatchOperationType.add);
                         break;
                     case JsonPatchOperationType.move:
-                        var value = resolver.GetValueFromPath(typeof(TEntity), operation.ParsedFromPath, entity);
-                        resolver.SetValueFromPath(typeof(TEntity), operation.ParsedFromPath, entity, null, JsonPatchOperationType.remove);
-                        resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, value, JsonPatchOperationType.add);
+                        var value = Resolver.GetValueFromPath(typeof(TEntity), operation.ParsedFromPath, entity);
+                        Resolver.SetValueFromPath(typeof(TEntity), operation.ParsedFromPath, entity, null, JsonPatchOperationType.remove);
+                        Resolver.SetValueFromPath(typeof(TEntity), operation.ParsedPath, entity, value, JsonPatchOperationType.add);
                         break;
                     case JsonPatchOperationType.test:
                         break;
@@ -119,7 +119,7 @@ namespace JsonPatch
 
         private bool AreNotEqual(TEntity entity, JsonPatchOperation operation)
         {
-            return resolver.GetValueFromPath(typeof(TEntity), operation.ParsedPath, entity) != operation.Value;
+            return Resolver.GetValueFromPath(typeof(TEntity), operation.ParsedPath, entity) != operation.Value;
         }
     }
 }

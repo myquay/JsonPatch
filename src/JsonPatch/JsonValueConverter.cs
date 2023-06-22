@@ -1,4 +1,4 @@
-﻿using JsonPatch.Common.Paths;
+﻿using JsonPatch.Paths;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

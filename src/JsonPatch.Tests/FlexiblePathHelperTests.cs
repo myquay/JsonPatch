@@ -2,8 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using JsonPatch.Tests.Entities;
 using JsonPatch.Formatting;
-using JsonPatch.Common.Paths.Resolvers;
-using JsonPatch.Common.Paths.Components;
+using JsonPatch.Paths.Resolvers;
+using JsonPatch.Paths.Components;
 
 namespace JsonPatch.Tests
 {
