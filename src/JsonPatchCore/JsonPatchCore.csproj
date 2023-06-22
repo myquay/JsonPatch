@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\JsonPatch.Common\JsonPatch.Common.csproj" />
+    <ProjectReference Include="..\JsonPatch.Common\JsonPatch.Common.csproj" />
   </ItemGroup>
 
 </Project>

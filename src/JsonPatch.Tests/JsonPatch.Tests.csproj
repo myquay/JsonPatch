@@ -99,8 +99,8 @@
     <Compile Include="PathHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\JsonPatch.Common\JsonPatch.Common.csproj">
-      <Project>{577D7C0E-32D9-4C88-8C93-74794DAEC76C}</Project>
+    <ProjectReference Include="..\JsonPatch.Common\JsonPatch.Common.csproj">
+      <Project>{c9e7ef1a-8034-454f-9349-610bf69bf91d}</Project>
       <Name>JsonPatch.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\JsonPatch\JsonPatch.csproj">
