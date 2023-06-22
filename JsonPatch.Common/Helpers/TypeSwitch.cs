@@ -48,7 +48,7 @@ namespace JsonPatch.Helpers
             /// <summary>
             /// The source value.
             /// </summary>
-            private TSource value;
+            private readonly TSource value;
             /// <summary>
             /// Whether a switch case handled the value.
             /// </summary>

@@ -284,7 +284,7 @@ namespace JsonPatch.Tests
             };
 
             //act
-            resolver.GetValueFromPath(typeof(SimpleEntity), "/Foomissing", entity);
+            resolver.GetValueFromPath(typeof(SimpleEntity), "/Foo missing", entity);
         }
 
         #endregion
@@ -767,7 +767,7 @@ namespace JsonPatch.Tests
         }
 
         [TestMethod]
-        public void SetValueFromPath_RemoveDictionaryValue_NoOpForNonexistingKey()
+        public void SetValueFromPath_RemoveDictionaryValue_NoOpForNonExistingKey()
         {
             //Arrange
             var entity = new DictionaryEntity<int>

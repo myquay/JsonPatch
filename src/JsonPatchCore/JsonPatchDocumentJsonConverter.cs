@@ -61,7 +61,7 @@ public class JsonPatchDocumentJsonConverter : JsonConverter<JsonPatchDocument>
     }
 
     /// <summary>
-    /// Serailise the JsonPatchDocument to a Json string
+    /// Serialise the JsonPatchDocument to a Json string
     /// </summary>
     /// <param name="writer"></param>
     /// <param name="value"></param>

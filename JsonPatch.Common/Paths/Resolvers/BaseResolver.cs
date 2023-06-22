@@ -117,13 +117,8 @@ namespace JsonPatch.Paths.Resolvers
 
             // Attempt to retrieve the corresponding property.
             Type parentType = (previous == null) ? rootEntityType : previous.ComponentType;
-            var property = GetProperty(parentType, component);
-
-            if (property == null)
-            {
-                throw new JsonPatchParseException(string.Format("There is no property named \"{0}\" on type {1}.",
+            var property = GetProperty(parentType, component) ?? throw new JsonPatchParseException(string.Format("There is no property named \"{0}\" on type {1}.",
                     component, parentType.Name));
-            }
 
             return new PropertyPathComponent(property.Name)
             {
@@ -237,7 +232,7 @@ namespace JsonPatch.Paths.Resolvers
                         {
                             try
                             {
-                                var list = (IList)previous;
+                                IList list = (IList)previous;
                                 previous = list[component.CollectionIndex];
                             }
                             catch (Exception e)
@@ -275,12 +270,7 @@ namespace JsonPatch.Paths.Resolvers
                 PathComponent[] parent = pathComponents.Take(pathComponents.Length - 1).ToArray();
                 string parentPath = PathComponent.GetFullPath(parent);
 
-                object previous = GetValueFromPath(entityType, parent, entity);
-
-                if (previous == null)
-                {
-                    throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is null.", parentPath));
-                }
+                object previous = GetValueFromPath(entityType, parent, entity) ?? throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is null.", parentPath));
 
                 var target = pathComponents.Last();
 
@@ -302,12 +292,7 @@ namespace JsonPatch.Paths.Resolvers
                     })
                     .Case((DictionaryPathComponent component) =>
                     {
-                        var dictionary = previous as IDictionary;
-                        if (dictionary == null)
-                        {
-                            throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
-                        }
-
+                        IDictionary dictionary = previous as IDictionary ?? throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
                         switch (operationType)
                         {
                             case JsonPatchOperationType.add:
@@ -325,12 +310,7 @@ namespace JsonPatch.Paths.Resolvers
                     })
                     .Case((CollectionPathComponent component) =>
                     {
-                        var list = previous as IList;
-                        if (list == null)
-                        {
-                            throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
-                        }
-
+                        IList list = previous as IList ?? throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
                         switch (operationType)
                         {
                             case JsonPatchOperationType.add:
@@ -342,12 +322,7 @@ namespace JsonPatch.Paths.Resolvers
                     })
                     .Case((CollectionIndexPathComponent component) =>
                     {
-                        var list = previous as IList;
-                        if (list == null)
-                        {
-                            throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
-                        }
-
+                        IList list = previous as IList ?? throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
                         switch (operationType)
                         {
                             case JsonPatchOperationType.add:

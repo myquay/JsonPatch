@@ -15,7 +15,7 @@ namespace JsonPatch.Paths.Resolvers
     /// </summary>
     public class FlexiblePathResolver : BaseResolver
     {
-        private IValueConverter converter;
+        private readonly IValueConverter converter;
 
         /// <summary>
         /// Constructor
@@ -34,11 +34,9 @@ namespace JsonPatch.Paths.Resolvers
         /// <returns></returns>
         internal override PropertyInfo GetProperty(Type parentType, string component)
         {
-            var property = new AttributePropertyPathResolver(converter).GetProperty(parentType, component);
-            if (property == null)
-                property = new ExactCasePropertyPathResolver(converter).GetProperty(parentType, component);
-            if (property == null)
-                property = new CaseInsensitivePropertyPathResolver(converter).GetProperty(parentType, component);
+            var property = (new AttributePropertyPathResolver(converter).GetProperty(parentType, component) ?? 
+                new ExactCasePropertyPathResolver(converter).GetProperty(parentType, component)) ?? 
+                new CaseInsensitivePropertyPathResolver(converter).GetProperty(parentType, component);
             return property;
         }
     }

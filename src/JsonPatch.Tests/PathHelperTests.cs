@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using JsonPatch.Tests.Entities;
 using System.Collections.Generic;
-using JsonPatch.Formatting;
 using JsonPatch.Paths.Resolvers;
 using JsonPatch.Paths;
 using JsonPatch;
@@ -36,7 +35,7 @@ namespace JsonPatch.Tests
         public void ParsePath_SimpleProperty_ParsesFails()
         {
             //act
-            var pathComponents = _resolver.ParsePath("bar", typeof(SimpleEntity));
+            _ = _resolver.ParsePath("bar", typeof(SimpleEntity));
         }
 
         [TestMethod]
@@ -808,7 +807,7 @@ namespace JsonPatch.Tests
         }
 
         [TestMethod]
-        public void SetValueFromPath_RemoveDictionaryValue_NoOpForNonexistingKey()
+        public void SetValueFromPath_RemoveDictionaryValue_NoOpForNonExistingKey()
         {
             //Arrange
             var entity = new DictionaryEntity<int>
