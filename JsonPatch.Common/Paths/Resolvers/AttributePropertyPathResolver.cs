@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JsonPatch.Common.Paths.Resolvers
+namespace JsonPatch.Paths.Resolvers
 {
     public class AttributePropertyPathResolver : BaseResolver
     {

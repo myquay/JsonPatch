@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JsonPatch.Common.Helpers
+namespace JsonPatch.Helpers
 {
     /// <summary>
     /// Executes a particular piece of code based on the type of the argument.

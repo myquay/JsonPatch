@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace JsonPatch.Common.Paths.Resolvers
+namespace JsonPatch.Paths.Resolvers
 {
     /// <summary>
     /// Case insensitive path resolver

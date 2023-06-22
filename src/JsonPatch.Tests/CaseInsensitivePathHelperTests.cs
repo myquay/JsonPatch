@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using JsonPatch.Tests.Entities;
-using JsonPatch.Common.Paths.Resolvers;
-using JsonPatch.Common.Paths.Components;
-using JsonPatch.Common;
-using JsonPatch.Common.Paths;
+using JsonPatch.Paths.Resolvers;
+using JsonPatch.Paths.Components;
+using JsonPatch;
+using JsonPatch.Paths;
 using System.Collections.Generic;
 
 namespace JsonPatch.Tests

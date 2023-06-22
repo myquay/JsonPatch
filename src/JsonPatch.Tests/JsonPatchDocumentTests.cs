@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using JsonPatch.Tests.Entities;
-using JsonPatch.Common;
+using JsonPatch;
 
 namespace JsonPatch.Tests
 {

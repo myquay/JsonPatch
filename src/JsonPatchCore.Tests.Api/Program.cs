@@ -1,4 +1,4 @@
-using JsonPatchCore;
+using JsonPatch;
 
 var builder = WebApplication.CreateBuilder(args);
 

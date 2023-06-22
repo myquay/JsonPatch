@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace JsonPatchCore;
+namespace JsonPatch;
 
 public class JsonPatchDocumentJsonConverter : JsonConverter<JsonPatchDocument>
 {
@@ -21,16 +21,16 @@ public class JsonPatchDocumentJsonConverter : JsonConverter<JsonPatchDocument>
         {
             switch (operation.op)
             {
-                case JsonPatch.Common.Constants.Operations.ADD:
+                case JsonPatch.Constants.Operations.ADD:
                     result.Add(operation.path, operation.value!);
                     break;
-                case JsonPatch.Common.Constants.Operations.REPLACE:
+                case JsonPatch.Constants.Operations.REPLACE:
                     result.Replace(operation.path, operation.value!);
                     break;
-                case JsonPatch.Common.Constants.Operations.REMOVE:
+                case JsonPatch.Constants.Operations.REMOVE:
                     result.Remove(operation.path);
                     break;
-                case JsonPatch.Common.Constants.Operations.MOVE:
+                case JsonPatch.Constants.Operations.MOVE:
                     result.Move(operation.from!, operation.path);
                     break;
                 default:

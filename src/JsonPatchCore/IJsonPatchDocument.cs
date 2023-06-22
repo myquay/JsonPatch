@@ -1,4 +1,4 @@
-﻿namespace JsonPatchCore;
+﻿namespace JsonPatch;
 
 public interface IJsonPatchDocument<T> where T : class
 {

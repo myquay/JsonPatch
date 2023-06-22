@@ -1,12 +1,12 @@
-﻿using JsonPatch.Common.Extensions;
-using JsonPatch.Common.Helpers;
-using JsonPatch.Common.Paths.Components;
+﻿using JsonPatch.Extensions;
+using JsonPatch.Helpers;
+using JsonPatch.Paths.Components;
 using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
 
-namespace JsonPatch.Common.Paths.Resolvers
+namespace JsonPatch.Paths.Resolvers
 {
     public abstract class BaseResolver : IPathResolver
     {

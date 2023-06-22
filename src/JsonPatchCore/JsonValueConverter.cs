@@ -1,4 +1,4 @@
-﻿using JsonPatch.Common.Paths;
+﻿using JsonPatch.Paths;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -7,8 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace JsonPatchCore
-{
+namespace JsonPatch {
     public class JsonValueConverter : IValueConverter
     {
         public object ConvertTo(object value, Type type)

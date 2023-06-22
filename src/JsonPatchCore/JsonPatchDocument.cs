@@ -1,24 +1,23 @@
-﻿using Common = JsonPatch.Common;
-using JsonPatch.Common.Paths.Resolvers;
-using JsonPatchCore.Infrastructure;
+﻿using JsonPatch.Paths.Resolvers;
+using JsonPatch.Infrastructure;
 using System.Reflection;
 using System.Text.Json;
-using JsonPatch.Common.Model;
+using JsonPatch.Model;
 using Microsoft.AspNetCore.Http;
 
-namespace JsonPatchCore;
+namespace JsonPatch;
 
 public class JsonPatchDocument
 {
     protected readonly List<JsonPatchOperation> Operations = new();
 
-    public void Add(string path, object value) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Add, path, value));
+    public void Add(string path, object value) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.add, path, value));
 
-    public void Replace(string path, object value) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Replace, path, value));
+    public void Replace(string path, object value) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.replace, path, value));
 
-    public void Remove(string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Remove, path));
+    public void Remove(string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.remove, path));
 
-    public void Move(string from, string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Move, path, FromPath: @from));
+    public void Move(string from, string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.move, path, FromPath: @from));
 }
 
 public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<TEntity> where TEntity : class
@@ -32,20 +31,20 @@ public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<
             var parsedPath = _resolver.ParsePath(operation.Path, typeof(TEntity));
             switch (operation.Type)
             {
-                case JsonPatchOperationType.Remove:
-                    _resolver.SetValueFromPath(typeof(TEntity), parsedPath, entity, null, Common.JsonPatchOperationType.remove);
+                case JsonPatchOperationType.remove:
+                    _resolver.SetValueFromPath(typeof(TEntity), parsedPath, entity, null, JsonPatchOperationType.remove);
                     break;
-                case JsonPatchOperationType.Replace:
-                    _resolver.SetValueFromPath(typeof(TEntity), parsedPath, entity, operation.Value, Common.JsonPatchOperationType.replace);
+                case JsonPatchOperationType.replace:
+                    _resolver.SetValueFromPath(typeof(TEntity), parsedPath, entity, operation.Value, JsonPatchOperationType.replace);
                     break;
-                case JsonPatchOperationType.Add:
-                    _resolver.SetValueFromPath(typeof(TEntity), parsedPath, entity, operation.Value, Common.JsonPatchOperationType.add);
+                case JsonPatchOperationType.add:
+                    _resolver.SetValueFromPath(typeof(TEntity), parsedPath, entity, operation.Value, JsonPatchOperationType.add);
                     break;
-                case JsonPatchOperationType.Move:
+                case JsonPatchOperationType.move:
                     var parsedFromPath = _resolver.ParsePath(operation.FromPath, typeof(TEntity));
                     var value = _resolver.GetValueFromPath(typeof(TEntity), parsedFromPath, entity);
-                    _resolver.SetValueFromPath(typeof(TEntity), parsedFromPath, entity, null, Common.JsonPatchOperationType.remove);
-                    _resolver.SetValueFromPath(typeof(TEntity), parsedPath, entity, value, Common.JsonPatchOperationType.add);
+                    _resolver.SetValueFromPath(typeof(TEntity), parsedFromPath, entity, null, JsonPatchOperationType.remove);
+                    _resolver.SetValueFromPath(typeof(TEntity), parsedPath, entity, value, JsonPatch.JsonPatchOperationType.add);
                     break;
                 default:
                     throw new NotSupportedException("Operation not supported: " + operation.Type);
@@ -63,7 +62,7 @@ public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<
     public static async ValueTask<JsonPatchDocument<TEntity>?> BindAsync(HttpContext httpContext)
     {
         if (JsonPatchSettings.Options.RequireJsonPatchContentType && httpContext.Request.ContentType != "application/json-patch+json")
-            throw new Common.JsonPatchParseException("The request content type must be 'application/json-patch+json'");
+            throw new JsonPatchParseException("The request content type must be 'application/json-patch+json'");
 
         using (var sr = new StreamReader(httpContext.Request.Body))
         {
@@ -75,18 +74,18 @@ public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<
             {
                 switch (operation.op)
                 {
-                    case Common.Constants.Operations.REPLACE:
-                        document.Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Replace, operation.path, Value: operation.value));
+                    case Constants.Operations.REPLACE:
+                        document.Operations.Add(new JsonPatchOperation(JsonPatchOperationType.replace, operation.path, Value: operation.value));
                         break;
 
-                    case Common.Constants.Operations.MOVE:
-                        document.Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Move, operation.path, Value: operation.value, FromPath: operation.from));
+                    case Constants.Operations.MOVE:
+                        document.Operations.Add(new JsonPatchOperation(JsonPatchOperationType.move, operation.path, Value: operation.value, FromPath: operation.from));
                         break;
-                    case Common.Constants.Operations.ADD:
-                        document.Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Add, operation.path, Value: operation.value));
+                    case Constants.Operations.ADD:
+                        document.Operations.Add(new JsonPatchOperation(JsonPatchOperationType.add, operation.path, Value: operation.value));
                         break;
-                    case Common.Constants.Operations.REMOVE:
-                        document.Operations.Add(new JsonPatchOperation(JsonPatchOperationType.Remove, operation.path));
+                    case Constants.Operations.REMOVE:
+                        document.Operations.Add(new JsonPatchOperation(JsonPatchOperationType.remove, operation.path));
                         break;
                 }
             }

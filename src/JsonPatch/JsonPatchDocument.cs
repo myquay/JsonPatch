@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using JsonPatch.Common;
-using JsonPatch.Common.Paths;
-using JsonPatch.Common.Paths.Resolvers;
+using JsonPatch;
+using JsonPatch.Paths;
+using JsonPatch.Paths.Resolvers;
 using JsonPatch.Formatting;
 
 namespace JsonPatch

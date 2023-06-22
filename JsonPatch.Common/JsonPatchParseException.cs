@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JsonPatch.Common
+namespace JsonPatch
 {
     public class JsonPatchParseException : Exception
     {

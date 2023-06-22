@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace JsonPatch.Common.Paths
+namespace JsonPatch.Paths
 {
     public interface IValueConverter
     {

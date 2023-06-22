@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace JsonPatch.Common.Paths.Components
+namespace JsonPatch.Paths.Components
 {
     public class PathComponent
     {

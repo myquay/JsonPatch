@@ -1,7 +1,7 @@
-﻿using JsonPatch.Common.Paths.Resolvers;
-using JsonPatchCore.Infrastructure;
+﻿using JsonPatch.Paths.Resolvers;
+using JsonPatch.Infrastructure;
 
-namespace JsonPatchCore;
+namespace JsonPatch;
 
 /// <summary>
 /// Collection of settings related to JsonPath

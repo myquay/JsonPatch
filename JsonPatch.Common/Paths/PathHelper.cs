@@ -1,8 +1,8 @@
 ﻿using System;
-using JsonPatch.Common.Paths.Components;
-using JsonPatch.Common.Paths.Resolvers;
+using JsonPatch.Paths.Components;
+using JsonPatch.Paths.Resolvers;
 
-namespace JsonPatch.Common.Paths
+namespace JsonPatch.Paths
 {
     public static class PathHelper
     {

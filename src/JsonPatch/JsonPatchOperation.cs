@@ -1,5 +1,5 @@
-﻿using JsonPatch.Common;
-using JsonPatch.Common.Paths.Components;
+﻿using JsonPatch;
+using JsonPatch.Paths.Components;
 
 namespace JsonPatch
 {
