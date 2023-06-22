@@ -89,7 +89,6 @@
     <Compile Include="JsonPatchDocument.cs" />
     <Compile Include="JsonPatchOperation.cs" />
     <Compile Include="JsonValueConverter.cs" />
-    <Compile Include="Model\PatchOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

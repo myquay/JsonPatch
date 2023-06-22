@@ -8,11 +8,21 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace JsonPatch {
+
+    /// <summary>
+    /// Converts a value from one type to another using Json serialisation as a fallback
+    /// </summary>
     public class JsonValueConverter : IValueConverter
     {
+        /// <summary>
+        /// Convert from one object to another
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public object ConvertTo(object value, Type type)
         {
-#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8604, CS8603 
             if (type.IsPrimitive)
             {
                 return Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
@@ -25,7 +35,7 @@ namespace JsonPatch {
             {
                 return JsonSerializer.Deserialize(JsonSerializer.Serialize(value), type);
             }
-#pragma warning restore CS8603 // Possible null reference return.
+#pragma warning restore CS8604, CS8603 
         }
     }
 }

@@ -8,8 +8,14 @@ namespace JsonPatch;
 /// </summary>
 public record JsonPatchOptions
 {
+    /// <summary>
+    /// The Path Resolver to use when parsing JsonPath
+    /// </summary>
     public IPathResolver PathResolver { get; set; } = new CaseInsensitivePropertyPathResolver(new JsonValueConverter());
 
+    /// <summary>
+    /// Weather or not to require the Content-Type header to be application/json-patch+json
+    /// </summary>
     public bool RequireJsonPatchContentType { get; set; } = true;
 
 }

@@ -8,11 +8,18 @@ using System.Reflection;
 
 namespace JsonPatch.Paths.Resolvers
 {
+    /// <summary>
+    /// Base resolver 
+    /// </summary>
     public abstract class BaseResolver : IPathResolver
     {
 
         private readonly IValueConverter converter;
 
+        /// <summary>
+        /// Constructor - set the converter
+        /// </summary>
+        /// <param name="converter"></param>
         public BaseResolver(IValueConverter converter)
         {
             this.converter = converter;
@@ -20,6 +27,11 @@ namespace JsonPatch.Paths.Resolvers
 
         internal abstract PropertyInfo GetProperty(Type parentType, string component);
 
+        /// <summary>
+        /// Get components of a path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         protected string[] GetPathComponents(string path)
         {
             // Normalize the path by ensuring it begins with a single forward slash, and has
@@ -31,6 +43,14 @@ namespace JsonPatch.Paths.Resolvers
             return path.Split('/').Skip(1).ToArray();
         }
 
+        /// <summary>
+        /// Parse a component
+        /// </summary>
+        /// <param name="component"></param>
+        /// <param name="rootEntityType"></param>
+        /// <param name="previous"></param>
+        /// <returns></returns>
+        /// <exception cref="JsonPatchParseException"></exception>
         public PathComponent ParsePathComponent(string component, Type rootEntityType, PathComponent previous = null)
         {
             if (string.IsNullOrWhiteSpace(component))
@@ -121,6 +141,13 @@ namespace JsonPatch.Paths.Resolvers
             return entityType.GetGenericArguments().First();
         }
 
+        /// <summary>
+        /// Parse a path
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="entityType"></param>
+        /// <returns></returns>
+        /// <exception cref="JsonPatchParseException"></exception>
         public PathComponent[] ParsePath(string path, Type entityType)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -156,6 +183,14 @@ namespace JsonPatch.Paths.Resolvers
             return parsedComponents;
         }
 
+        /// <summary>
+        /// Get value from a path
+        /// </summary>
+        /// <param name="entityType"></param>
+        /// <param name="pathComponents"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// <exception cref="JsonPatchException"></exception>
         public object GetValueFromPath(Type entityType, PathComponent[] pathComponents, object entity)
         {
             try
@@ -224,6 +259,15 @@ namespace JsonPatch.Paths.Resolvers
             }
         }
 
+        /// <summary>
+        /// Set the value from a path
+        /// </summary>
+        /// <param name="entityType"></param>
+        /// <param name="pathComponents"></param>
+        /// <param name="entity"></param>
+        /// <param name="value"></param>
+        /// <param name="operationType"></param>
+        /// <exception cref="JsonPatchException"></exception>
         public void SetValueFromPath(Type entityType, PathComponent[] pathComponents, object entity, object value, JsonPatchOperationType operationType)
         {
             try
@@ -328,11 +372,22 @@ namespace JsonPatch.Paths.Resolvers
             }
         }
 
+        /// <summary>
+        /// Get the type of the collection
+        /// </summary>
+        /// <param name="entityType"></param>
+        /// <returns></returns>
         private Type GetCollectionType(Type entityType)
         {
             return entityType.GetElementType() ?? entityType.GetGenericArguments().First();
         }
 
+        /// <summary>
+        /// Convert source type to target type
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private object ConvertValue(object value, Type type)
         {
             return converter.ConvertTo(value, type);

@@ -8,12 +8,24 @@ using System.Threading.Tasks;
 
 namespace JsonPatch.Paths.Resolvers
 {
+    /// <summary>
+    /// Resolve based on attribute property (DataMemberAttribute)
+    /// </summary>
     public class AttributePropertyPathResolver : BaseResolver
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="converter"></param>
         public AttributePropertyPathResolver(IValueConverter converter) : base(converter)
         {  }
 
-
+        /// <summary>
+        /// Get the property based on the component name
+        /// </summary>
+        /// <param name="parentType"></param>
+        /// <param name="component"></param>
+        /// <returns></returns>
         internal override PropertyInfo GetProperty(Type parentType, string component)
         {
             var dataMemberPropertyMatch = parentType.GetProperties().FirstOrDefault(p =>

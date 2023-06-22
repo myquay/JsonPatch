@@ -40,7 +40,7 @@ namespace JsonPatch.Helpers
         }
 
         /// <summary>
-        /// Internal class used by the <see cref="TypwSwitch"/> static class.
+        /// Internal class used by the <see cref="TypeSwitch"/> static class.
         /// </summary>
         /// <typeparam name="TSource">The source type.</typeparam>
         public sealed class Switch<TSource>

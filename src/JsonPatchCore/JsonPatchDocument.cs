@@ -2,28 +2,63 @@
 using JsonPatch.Infrastructure;
 using System.Reflection;
 using System.Text.Json;
-using JsonPatch.Model;
 using Microsoft.AspNetCore.Http;
+using JsonPatch.Model;
 
 namespace JsonPatch;
 
+/// <summary>
+/// Represent a JsonPatchDocument
+/// </summary>
 public class JsonPatchDocument
 {
+    /// <summary>
+    /// List of operations to apply
+    /// </summary>
     protected readonly List<JsonPatchOperation> Operations = new();
 
+    /// <summary>
+    /// Add the "Add" operation to the list
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="value"></param>
     public void Add(string path, object value) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.add, path, value));
 
+    /// <summary>
+    /// Add the "Replace" operation to the list
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="value"></param>
     public void Replace(string path, object value) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.replace, path, value));
 
+    /// <summary>
+    /// Add the "Remove" operation to the list
+    /// </summary>
+    /// <param name="path"></param>
     public void Remove(string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.remove, path));
 
+    /// <summary>
+    /// Add the "Move" operation to the list
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="path"></param>
     public void Move(string from, string path) => Operations.Add(new JsonPatchOperation(JsonPatchOperationType.move, path, FromPath: @from));
 }
 
+/// <summary>
+/// A typed JsonPatchDocument
+/// </summary>
+/// <typeparam name="TEntity"></typeparam>
 public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<TEntity> where TEntity : class
 {
     private readonly IPathResolver _resolver = JsonPatchSettings.Options.PathResolver;
 
+    /// <summary>
+    /// Apply the operations to the entity
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    /// <exception cref="NotSupportedException"></exception>
     public TEntity ApplyTo(TEntity entity)
     {
         foreach (var operation in Operations)
@@ -54,11 +89,23 @@ public class JsonPatchDocument<TEntity> : JsonPatchDocument, IJsonPatchDocument<
         return entity;
     }
 
+    /// <summary>
+    /// Bind to the HTTP Request
+    /// </summary>
+    /// <param name="httpContext"></param>
+    /// <param name="parameter"></param>
+    /// <returns></returns>
     public static ValueTask<JsonPatchDocument<TEntity>?> BindAsync(HttpContext httpContext, ParameterInfo parameter)
     {
         return BindAsync(httpContext);
     }
 
+    /// <summary>
+    /// Bind to the HTTP Request
+    /// </summary>
+    /// <param name="httpContext"></param>
+    /// <returns></returns>
+    /// <exception cref="JsonPatchParseException"></exception>
     public static async ValueTask<JsonPatchDocument<TEntity>?> BindAsync(HttpContext httpContext)
     {
         if (JsonPatchSettings.Options.RequireJsonPatchContentType && httpContext.Request.ContentType != "application/json-patch+json")
