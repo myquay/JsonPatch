@@ -23,7 +23,7 @@ namespace JsonPatch {
         public object ConvertTo(object value, Type type)
         {
 #pragma warning disable CS8604, CS8603 
-            if (type.IsPrimitive)
+            if (type.IsPrimitive && value is IConvertible)
             {
                 return Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
             }

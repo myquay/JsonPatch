@@ -13,7 +13,7 @@ namespace JsonPatch
     {
         public object ConvertTo(object value, Type type)
         {
-            if(type.IsPrimitive)
+            if(type.IsPrimitive && value is IConvertible)
             {
                 return Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
             }

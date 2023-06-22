@@ -19,5 +19,7 @@ namespace JsonPatch.Tests.Entities
 
         [JsonPropertyName("jsonProperty")]
         public string Car { get; set; }
+
+        public bool BooleanValue { get; set; }
     }
 }
