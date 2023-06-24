@@ -12,7 +12,7 @@
 		<projectUrl>https://github.com/myquay/JsonPatch</projectUrl>
 		<repository type="git" url="https://github.com/myquay/JsonPatch.git" branch="master" commit="$commit$" />
 		<description>
-JsonPatch support for ASP.NET Core 6 including support for ASP.NET Minimal APIs. Legacy support for ASP.NET Web API 2 (.NET Framework 4.8).
+JsonPatch support for ASP.NET Core 6 including support for ASP.NET Minimal APIs. Legacy support for ASP.NET MVC (.NET Framework 4.8).
 
 There are no external dependencies for the .NET 6 version and minimal dependencies for the .NET Framework Version.
 
@@ -36,7 +36,6 @@ $releasenotes$
 			<group targetFramework="net48">
 				<dependency id="Newtonsoft.Json" version="13.0.1" />
 				<dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.9" />
-				<dependency id="System.Text.Json" version="7.0.3" />
 			</group>
 			<group targetFramework="net6.0"></group>
 		</dependencies>

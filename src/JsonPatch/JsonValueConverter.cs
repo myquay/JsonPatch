@@ -1,10 +1,11 @@
 ﻿using JsonPatch.Paths;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace JsonPatch
@@ -23,7 +24,7 @@ namespace JsonPatch
             }
             else
             {
-                return JsonSerializer.Deserialize(JsonSerializer.Serialize(value), type);
+                return JsonConvert.DeserializeObject(JsonConvert.SerializeObject(value), type);
             }
         }
     }
