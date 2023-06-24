@@ -6,6 +6,7 @@ using JsonPatch.Paths.Components;
 using JsonPatch;
 using JsonPatch.Paths;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace JsonPatch.Tests
 {
@@ -429,6 +430,21 @@ namespace JsonPatch.Tests
 
             //assert
             Assert.AreEqual("New Value", entity.Foo);
+        }
+
+        [TestMethod]
+        public void SetValueFromPath_NonConvertableToPrimative()
+        {
+            //arrange
+            var entity = new SimpleEntity { BooleanValue = false };
+
+            var document = JsonDocument.Parse("true");
+
+            //act
+            resolver.SetValueFromPath(typeof(SimpleEntity), "/booleanValue", entity, document.RootElement, JsonPatchOperationType.add);
+
+            //assert
+            Assert.AreEqual(true, entity.BooleanValue);
         }
 
         [TestMethod]
