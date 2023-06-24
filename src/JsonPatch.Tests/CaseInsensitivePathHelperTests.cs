@@ -441,7 +441,7 @@ namespace JsonPatch.Tests
             var document = JsonDocument.Parse("true");
 
             //act
-            resolver.SetValueFromPath(typeof(SimpleEntity), "/booleanValue", entity, document.RootElement, JsonPatchOperationType.add);
+            resolver.SetValueFromPath(typeof(SimpleEntity), "/booleanValue", entity, document.RootElement.GetBoolean(), JsonPatchOperationType.add);
 
             //assert
             Assert.AreEqual(true, entity.BooleanValue);
