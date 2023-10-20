@@ -100,7 +100,3 @@ Here's our flavour:
 1. Add will not add a property that does not exist, it can only be used to specify values on properties that are null.
 2. Remove will not remove a property, it will set its value to null.
 3. Replace will replace the value of a property even if it is null.
-
-This is still very much an early project, don't use it in production yet unless you understand the source and don't mind fixing a few bugs ;)
-
-Twitter: @myquay
