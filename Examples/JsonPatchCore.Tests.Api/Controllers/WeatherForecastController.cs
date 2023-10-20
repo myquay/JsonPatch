@@ -12,9 +12,9 @@ public class WeatherForecastController : ControllerBase
     {
         var weatherForecast = new WeatherForecast
         {
-            Remove = DateTime.UtcNow,
-            Replace = "ReplaceOld",
-            From = 123
+            Time = DateTime.UtcNow,
+            Description = "Sunny",
+            Weather = WeatherType.Sunny
         };
         
         patch.ApplyTo(weatherForecast);

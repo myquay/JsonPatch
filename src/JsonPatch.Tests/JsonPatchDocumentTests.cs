@@ -5,7 +5,6 @@ using JsonPatch.Tests.Entities;
 using JsonPatch;
 using System.Runtime;
 using System.Text.Json.Serialization;
-using JsonPatch.Tests.Entitys;
 using System;
 
 namespace JsonPatch.Tests
@@ -268,11 +267,28 @@ namespace JsonPatch.Tests
             var myException = Assert.ThrowsException<JsonPatchOperationException>(() => patchDocument.ApplyUpdatesTo(entity));
 
             //Assert
-            Assert.AreEqual(myException.Message, "Failed to set value at path \"/Foo\" while performing \"replace\" operation: Error converting value \"Garbage\" to type 'System.Nullable`1[JsonPatch.Tests.Entitys.SampleNullableEnum]'. Path '', line 1, position 9.");
+            Assert.AreEqual("Failed to set value at path \"/Foo\" while performing \"replace\" operation: Requested value 'Garbage' was not found.", myException.Message);
             Assert.AreEqual(myException.operationType, JsonPatchOperationType.replace);
             Assert.AreEqual(myException.path, $"/{nameof(EnumNullableEntity.Foo)}");
             Assert.AreEqual(myException.entityType, typeof(EnumNullableEntity).GetProperty(nameof(EnumNullableEntity.Foo)).PropertyType);
             Assert.AreEqual(myException.value, badEnumValue);
+        }
+
+        [TestMethod]
+        public void ApplyUpdate_ReplaceOperation_GoodNullableEnum()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<EnumNullableEntity>();
+            var entity = new EnumNullableEntity();
+            var goodEnumValue = "FirstEnum";
+
+            //Act
+            patchDocument.Replace(nameof(EnumNullableEntity.Foo), goodEnumValue);
+            patchDocument.ApplyUpdatesTo(entity);
+
+
+            //Assert
+            Assert.AreEqual(SampleEnum.FirstEnum, entity.Foo);
         }
 
         #endregion

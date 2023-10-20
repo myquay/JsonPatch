@@ -32,8 +32,7 @@ public class JsonPatchDocumentJsonConverter : JsonConverter<JsonPatchDocument>
 
         if (document.RootElement.ValueKind != JsonValueKind.Array) throw new JsonException("array expected");
 
-        var result = Activator.CreateInstance(typeToConvert) as JsonPatchDocument;
-        if (result == null) throw new InvalidOperationException($"Unable to create instance of {typeToConvert.FullName}");
+        if (Activator.CreateInstance(typeToConvert) is not JsonPatchDocument result) throw new InvalidOperationException($"Unable to create instance of {typeToConvert.FullName}");
 
         var operations = document.Deserialize<PatchOperation[]>(options) ?? Array.Empty<PatchOperation>();
         foreach (var operation in operations)

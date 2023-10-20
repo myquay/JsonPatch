@@ -1,14 +1,7 @@
-﻿namespace JsonPatch.Tests.Entitys
+﻿namespace JsonPatch.Tests.Entities
 {
     public class EnumNullableEntity
     {
-        public SampleNullableEnum? Foo { get; set; }
-    }
-
-    public enum SampleNullableEnum
-    {
-        FirstEnum,
-        SecondEnum,
-        ThirdEnum,
+        public SampleEnum? Foo { get; set; }
     }
 }

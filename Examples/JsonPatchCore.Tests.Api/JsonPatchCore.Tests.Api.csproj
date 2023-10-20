@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JsonPatchCore\JsonPatchCore.csproj" />
+    <ProjectReference Include="..\..\src\JsonPatchCore\JsonPatchCore.csproj" />
   </ItemGroup>
 
 </Project>
