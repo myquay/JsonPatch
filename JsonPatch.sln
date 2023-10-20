@@ -19,9 +19,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E8E53CC8-27DC-4E3A-8B8E-9C95E50D6E7D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{EF573DDA-4BDB-4975-A754-EEDDA2DD840B}"
-	ProjectSection(SolutionItems) = preProject
-		Examples\JsonPatchCore.Tests.Api\JsonPatchCore.Tests.Api.csproj = Examples\JsonPatchCore.Tests.Api\JsonPatchCore.Tests.Api.csproj
-	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JsonPatchCore.Tests.Api", "Examples\JsonPatchCore.Tests.Api\JsonPatchCore.Tests.Api.csproj", "{B8B7794E-062F-4204-953A-4CE3100667D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,12 +44,17 @@ Global
 		{C9E7EF1A-8034-454F-9349-610BF69BF91D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9E7EF1A-8034-454F-9349-610BF69BF91D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9E7EF1A-8034-454F-9349-610BF69BF91D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B7794E-062F-4204-953A-4CE3100667D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B7794E-062F-4204-953A-4CE3100667D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B7794E-062F-4204-953A-4CE3100667D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B7794E-062F-4204-953A-4CE3100667D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A8B44F91-1FF1-41C6-A19B-40700D26AA15} = {E8E53CC8-27DC-4E3A-8B8E-9C95E50D6E7D}
+		{B8B7794E-062F-4204-953A-4CE3100667D2} = {EF573DDA-4BDB-4975-A754-EEDDA2DD840B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B5D5B09B-A34A-4703-B321-A4E5C9FEB814}

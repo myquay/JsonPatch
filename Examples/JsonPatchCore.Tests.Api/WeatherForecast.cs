@@ -2,14 +2,18 @@ namespace JsonPatchCore.Tests.Api
 {
     public class WeatherForecast
     {
-        public string? Add { get; set; }
+        public string? Description { get; set; }
 
-        public string? Replace { get; set; }
+        public DateTime? Time { get; set; }
 
-        public int? From { get; set; }
+        public WeatherType? Weather { get; set; }
+    }
 
-        public int? To { get; set; }
-
-        public DateTime? Remove { get; set; }
+    public enum WeatherType
+    {
+        Sunny,
+        Cloudy,
+        Rainy,
+        Snowy
     }
 }

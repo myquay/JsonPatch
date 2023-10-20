@@ -27,9 +27,21 @@ namespace JsonPatch {
             {
                 return Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
             }
+            else if (Nullable.GetUnderlyingType(type)?.IsPrimitive == true && value is IConvertible)
+            {
+                if (value == null)
+                    return null;
+                return Convert.ChangeType(value, Nullable.GetUnderlyingType(type), CultureInfo.InvariantCulture);
+            }
             else if (type.IsEnum)
             {
                 return Enum.Parse(type, value.ToString());
+            }
+            else if (Nullable.GetUnderlyingType(type)?.IsEnum == true)
+            {
+                if (value == null)
+                    return null;
+                return Enum.Parse(Nullable.GetUnderlyingType(type), value.ToString());
             }
             else
             {

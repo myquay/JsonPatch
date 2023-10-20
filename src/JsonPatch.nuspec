@@ -12,22 +12,23 @@
 		<projectUrl>https://github.com/myquay/JsonPatch</projectUrl>
 		<repository type="git" url="https://github.com/myquay/JsonPatch.git" branch="master" commit="$commit$" />
 		<description>
-JsonPatch support for ASP.NET Core 6 including support for ASP.NET Minimal APIs. Legacy support for ASP.NET MVC (.NET Framework 4.8).
+      JsonPatch support for ASP.NET Core 6 including support for ASP.NET Minimal APIs. Legacy support for ASP.NET MVC (.NET Framework 4.8).
 
-There are no external dependencies for the .NET 6 version and minimal dependencies for the .NET Framework Version.
+      There are no external dependencies for the .NET 6 version and minimal dependencies for the .NET Framework Version.
 
-Thank you to all the contributers:
+      Thank you to all the contributers:
 
-  * tugberkugurlu (Tugberk Ugurlu)
-  * mindingdata (Wade Gausden)
-  * donaldgray
-  * lukas-shawford (Lukas Shawford)
-  * akozmic (Adam Kozmic)
-  * zihotki (Vasili Puchko)
-  * nikitasavinov (Nikita)
-  * denis-tsv (Denis)
-  * cajonesvu (Chris Jones)
-		</description>
+      * tugberkugurlu (Tugberk Ugurlu)
+      * mindingdata (Wade Gausden)
+      * donaldgray
+      * lukas-shawford (Lukas Shawford)
+      * akozmic (Adam Kozmic)
+      * zihotki (Vasili Puchko)
+      * nikitasavinov (Nikita)
+      * denis-tsv (Denis)
+      * cajonesvu (Chris Jones)
+      * broderickt2 (Broderick)
+    </description>
 		<releaseNotes>
 $releasenotes$
 		</releaseNotes>
