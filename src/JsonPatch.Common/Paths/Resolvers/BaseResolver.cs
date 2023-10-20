@@ -262,17 +262,17 @@ namespace JsonPatch.Paths.Resolvers
         /// <param name="entity"></param>
         /// <param name="value"></param>
         /// <param name="operationType"></param>
-        /// <exception cref="JsonPatchException"></exception>
+        /// <exception cref="JsonPatchOperationException"></exception>
         public void SetValueFromPath(Type entityType, PathComponent[] pathComponents, object entity, object value, JsonPatchOperationType operationType)
         {
+            var target = pathComponents.Last();
+
             try
             {
                 PathComponent[] parent = pathComponents.Take(pathComponents.Length - 1).ToArray();
                 string parentPath = PathComponent.GetFullPath(parent);
 
-                object previous = GetValueFromPath(entityType, parent, entity) ?? throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is null.", parentPath));
-
-                var target = pathComponents.Last();
+                object previous = GetValueFromPath(entityType, parent, entity) ?? throw new JsonPatchOperationException(string.Format("Value at parent path \"{0}\" is null.", parentPath));
 
                 TypeSwitch.On(target)
                     .Case((PropertyPathComponent component) =>
@@ -292,7 +292,7 @@ namespace JsonPatch.Paths.Resolvers
                     })
                     .Case((DictionaryPathComponent component) =>
                     {
-                        IDictionary dictionary = previous as IDictionary ?? throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
+                        IDictionary dictionary = previous as IDictionary ?? throw new JsonPatchOperationException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
                         switch (operationType)
                         {
                             case JsonPatchOperationType.add:
@@ -310,7 +310,7 @@ namespace JsonPatch.Paths.Resolvers
                     })
                     .Case((CollectionPathComponent component) =>
                     {
-                        IList list = previous as IList ?? throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
+                        IList list = previous as IList ?? throw new JsonPatchOperationException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
                         switch (operationType)
                         {
                             case JsonPatchOperationType.add:
@@ -322,7 +322,7 @@ namespace JsonPatch.Paths.Resolvers
                     })
                     .Case((CollectionIndexPathComponent component) =>
                     {
-                        IList list = previous as IList ?? throw new JsonPatchException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
+                        IList list = previous as IList ?? throw new JsonPatchOperationException(string.Format("Value at parent path \"{0}\" is not a valid collection.", parentPath));
                         switch (operationType)
                         {
                             case JsonPatchOperationType.add:
@@ -341,9 +341,10 @@ namespace JsonPatch.Paths.Resolvers
             }
             catch (Exception e)
             {
-                throw new JsonPatchException(string.Format(
-                    "Failed to set value at path \"{0}\" while performing \"{1}\" operation: {2}",
-                    PathComponent.GetFullPath(pathComponents), operationType, e.Message), e);
+                var errorMessage = string.Format("Failed to set value at path \"{0}\" while performing \"{1}\" operation: {2}",
+                    PathComponent.GetFullPath(pathComponents), operationType, e.Message);
+
+                throw new JsonPatchOperationException(errorMessage, operationType, PathComponent.GetFullPath(pathComponents), target.ComponentType, value);
             }
         }
 
