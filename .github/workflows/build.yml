@@ -1,6 +1,7 @@
 ﻿name: Build JsonPatch library
 
 on:
+  workflow_dispatch:
   push:
     branches:
     - master
