@@ -86,7 +86,7 @@ namespace JsonPatch.Tests
             Assert.IsTrue(pathComponents[0].IsCollection);
             Assert.AreEqual("5", pathComponents[1].Name);
             Assert.IsInstanceOfType(pathComponents[1], typeof(CollectionIndexPathComponent));
-            Assert.AreEqual(5, ((CollectionIndexPathComponent) pathComponents[1]).CollectionIndex);
+            Assert.AreEqual(5, ((CollectionIndexPathComponent)pathComponents[1]).CollectionIndex);
             Assert.AreEqual(typeof(string), pathComponents[1].ComponentType);
         }
 
@@ -438,7 +438,7 @@ namespace JsonPatch.Tests
         public void SetValueFromPath_InvalidPath_ThrowsException()
         {
             //act
-            _resolver.SetValueFromPath(typeof(SimpleEntity), "",  new SimpleEntity { }, null, JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(SimpleEntity), "", new SimpleEntity { }, null, JsonPatchOperationType.add);
         }
 
         [TestMethod]
@@ -488,7 +488,7 @@ namespace JsonPatch.Tests
 
             //act
             _resolver.SetValueFromPath(typeof(SimpleEntity), "/Foo", entity, "New Value", JsonPatchOperationType.replace);
-            
+
             //assert
             Assert.AreEqual("New Value", entity.Foo);
         }
@@ -559,7 +559,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(2, entity.Foo.Count);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_ReplaceIndexOutOfBounds_ThrowsException()
         {
             //Arrange
@@ -572,7 +572,7 @@ namespace JsonPatch.Tests
             _resolver.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddArrayValue_ThrowsError()
         {
             //Arrange
@@ -588,13 +588,13 @@ namespace JsonPatch.Tests
             // NotSupportedException: Collection was of a fixed size.
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_RemoveArrayValue_ThrowsException()
         {
             //Arrange
             var entity = new ArrayEntity
             {
-                Foo = new string[] {"Element One", "Element Two", "Element Three"}
+                Foo = new string[] { "Element One", "Element Two", "Element Three" }
             };
 
             //act
@@ -605,7 +605,7 @@ namespace JsonPatch.Tests
         }
 
         #endregion
-        
+
         #region List tests
 
         [TestMethod]
@@ -643,7 +643,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(3, entity.Foo.Count);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddToNullList_ThrowsException()
         {
             //Arrange
@@ -706,7 +706,7 @@ namespace JsonPatch.Tests
         }
 
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_RemoveIndexOutOfBounds_ThrowsException()
         {
             //Arrange
@@ -729,7 +729,7 @@ namespace JsonPatch.Tests
             //Arrange
             var entity = new DictionaryEntity<string>
             {
-                Foo = new Dictionary<string, string> {{"key1", "Element One"}, {"key2", "Element Two"},}
+                Foo = new Dictionary<string, string> { { "key1", "Element One" }, { "key2", "Element Two" }, }
             };
 
             //act
@@ -747,7 +747,7 @@ namespace JsonPatch.Tests
             //Arrange
             var entity = new DictionaryEntity<int>
             {
-                Foo = new Dictionary<int, string> {{1, "Element One"}, {2, "Element Two"},}
+                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
             };
 
             //act
@@ -765,7 +765,7 @@ namespace JsonPatch.Tests
             //Arrange
             var entity = new DictionaryEntity<int>
             {
-                Foo = new Dictionary<int, string> {{1, "Element One"}, {2, "Element Two"},}
+                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
             };
 
             //act
@@ -776,7 +776,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(3, entity.Foo.Count);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddDictionaryValue_ThrowsForExistingKey()
         {
             //Arrange
@@ -822,7 +822,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(2, entity.Foo.Count);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddToNullDictionary_ThrowsException()
         {
             //Arrange
@@ -851,7 +851,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual("New Value", entity.Bar.Foo);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_NullParent_ThrowsException()
         {
             //arrange
@@ -918,7 +918,7 @@ namespace JsonPatch.Tests
             Assert.IsNull(entity.Qux[0].Foo);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddToListItemOutOfBounds_ThrowsException()
         {
             //arrange
@@ -953,7 +953,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual("Element One - Updated", entity.Foo.Foo[0]);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddToNestedArray_ThrowsException()
         {
             //arrange

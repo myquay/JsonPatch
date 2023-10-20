@@ -552,7 +552,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(2, entity.Foo.Count);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_ReplaceIndexOutOfBounds_ThrowsException()
         {
             //Arrange
@@ -565,7 +565,7 @@ namespace JsonPatch.Tests
             resolver.SetValueFromPath(typeof(ArrayEntity), "/foo/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddArrayValue_ThrowsError()
         {
             //Arrange
@@ -577,11 +577,11 @@ namespace JsonPatch.Tests
             //act
             resolver.SetValueFromPath(typeof(ArrayEntity), "/foo/2", entity, "Element Three", JsonPatchOperationType.add);
 
-            // Arrays should not support resizing. Expect JsonPatchException with an inner exception of type
+            // Arrays should not support resizing. Expect JsonPatchOperationException with an inner exception of type
             // NotSupportedException: Collection was of a fixed size.
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_RemoveArrayValue_ThrowsException()
         {
             //Arrange
@@ -593,7 +593,7 @@ namespace JsonPatch.Tests
             //act
             resolver.SetValueFromPath(typeof(ArrayEntity), "/foo/1", entity, null, JsonPatchOperationType.remove);
 
-            // Arrays should not support resizing. Expect JsonPatchException with an inner exception of type
+            // Arrays should not support resizing. Expect JsonPatchOperationException with an inner exception of type
             // NotSupportedException: Collection was of a fixed size
         }
 
@@ -619,7 +619,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(3, entity.Foo.Count);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddToNullList_ThrowsException()
         {
             //Arrange
@@ -682,7 +682,7 @@ namespace JsonPatch.Tests
         }
 
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_RemoveIndexOutOfBounds_ThrowsException()
         {
             //Arrange
@@ -752,7 +752,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(3, entity.Foo.Count);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddDictionaryValue_ThrowsForExistingKey()
         {
             //Arrange
@@ -798,7 +798,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual(2, entity.Foo.Count);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddToNullDictionary_ThrowsException()
         {
             //Arrange
@@ -827,7 +827,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual("New Value", entity.Bar.Foo);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_NullParent_ThrowsException()
         {
             //arrange
@@ -894,7 +894,7 @@ namespace JsonPatch.Tests
             Assert.IsNull(entity.Qux[0].Foo);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddToListItemOutOfBounds_ThrowsException()
         {
             //arrange
@@ -929,7 +929,7 @@ namespace JsonPatch.Tests
             Assert.AreEqual("Element One - Updated", entity.Foo.Foo[0]);
         }
 
-        [TestMethod, ExpectedException(typeof(JsonPatchException))]
+        [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
         public void SetValueFromPath_AddToNestedArray_ThrowsException()
         {
             //arrange
