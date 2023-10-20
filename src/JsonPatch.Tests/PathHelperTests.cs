@@ -584,7 +584,7 @@ namespace JsonPatch.Tests
             //act
             _resolver.SetValueFromPath(typeof(ArrayEntity), "/Foo/2", entity, "Element Three", JsonPatchOperationType.add);
 
-            // Arrays should not support resizing. Expect JsonPatchException with an inner exception of type
+            // Arrays should not support resizing. Expect JsonPatchOperationException with an inner exception of type
             // NotSupportedException: Collection was of a fixed size.
         }
 
@@ -600,7 +600,7 @@ namespace JsonPatch.Tests
             //act
             _resolver.SetValueFromPath(typeof(ArrayEntity), "/Foo/1", entity, null, JsonPatchOperationType.remove);
 
-            // Arrays should not support resizing. Expect JsonPatchException with an inner exception of type
+            // Arrays should not support resizing. Expect JsonPatchOperationException with an inner exception of type
             // NotSupportedException: Collection was of a fixed size
         }
 
