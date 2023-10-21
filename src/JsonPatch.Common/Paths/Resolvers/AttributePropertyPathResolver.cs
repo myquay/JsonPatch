@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JsonPatch.Paths.Resolvers
 {
@@ -18,7 +15,8 @@ namespace JsonPatch.Paths.Resolvers
         /// </summary>
         /// <param name="converter"></param>
         public AttributePropertyPathResolver(IValueConverter converter) : base(converter)
-        {  }
+        {
+        }
 
         /// <summary>
         /// Get the property based on the component name

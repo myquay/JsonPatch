@@ -1,13 +1,9 @@
 ﻿using JsonPatch.Paths;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace JsonPatch {
+namespace JsonPatch
+{
 
     /// <summary>
     /// Converts a value from one type to another using Json serialisation as a fallback

@@ -1,17 +1,14 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using JsonPatch.Tests.Entities;
-using JsonPatch.Formatting;
+﻿using JsonPatch.Paths.Components;
 using JsonPatch.Paths.Resolvers;
-using JsonPatch.Paths.Components;
+using JsonPatch.Tests.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace JsonPatch.Tests
 {
     [TestClass]
     public class AttributePathHelperTests
     {
-
-        private IPathResolver resolver = new AttributePropertyPathResolver(new JsonValueConverter());
+        private readonly IPathResolver resolver = new AttributePropertyPathResolver(new JsonValueConverter());
 
         [TestMethod]
         public void ParsePath_DataMember_ParsesSuccessfully()

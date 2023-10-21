@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JsonPatch
+﻿namespace JsonPatch
 {
     /// <summary>
     /// Constants
@@ -35,7 +29,6 @@ namespace JsonPatch
             /// Moves a value from one location to the other.
             /// </summary>
             public const string MOVE = "move";
-
         }
     }
 }

@@ -13,7 +13,6 @@ namespace JsonPatch
 {
     public class JsonPatchDocument<TEntity> : IJsonPatchDocument where TEntity : class, new()
     {
-
         private IPathResolver Resolver
         {
             get

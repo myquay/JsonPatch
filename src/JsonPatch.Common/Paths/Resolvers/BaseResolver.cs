@@ -13,7 +13,6 @@ namespace JsonPatch.Paths.Resolvers
     /// </summary>
     public abstract class BaseResolver : IPathResolver
     {
-
         private readonly IValueConverter converter;
 
         /// <summary>

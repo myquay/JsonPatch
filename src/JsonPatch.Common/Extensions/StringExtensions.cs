@@ -6,7 +6,6 @@ namespace JsonPatch.Extensions
     {
         internal static bool IsPositiveInteger(this string @string)
         {
-
             bool isInteger = Int32.TryParse(@string, out int n);
 
             if (!isInteger)

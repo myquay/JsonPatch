@@ -1,7 +1,6 @@
 ﻿using JsonPatch.Paths.Components;
 using System;
 
-
 namespace JsonPatch.Paths.Resolvers
 {
     /// <summary>
