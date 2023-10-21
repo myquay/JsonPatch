@@ -1,13 +1,9 @@
 ﻿using JsonPatch.Model;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JsonPatch.Formatting
 {
@@ -15,8 +11,7 @@ namespace JsonPatch.Formatting
     {
         internal static JsonPatchSettings Settings { get; private set; }
         public JsonPatchFormatter() : this(JsonPatchSettings.DefaultPatchSettings())
-        {
-            
+        {            
         }
 
         public JsonPatchFormatter(JsonPatchSettings settings)
@@ -81,7 +76,6 @@ namespace JsonPatch.Formatting
                 }
 
                 return jsonPatchDocument;
-
             }
         }
     }

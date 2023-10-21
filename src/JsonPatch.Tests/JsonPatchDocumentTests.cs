@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using JsonPatch.Tests.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using JsonPatch.Tests.Entities;
-using JsonPatch;
-using System.Runtime;
-using System.Text.Json.Serialization;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace JsonPatch.Tests
 {

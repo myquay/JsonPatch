@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 
 namespace JsonPatch.Paths.Resolvers
@@ -14,7 +13,8 @@ namespace JsonPatch.Paths.Resolvers
         /// </summary>
         /// <param name="converter"></param>
         public CaseInsensitivePropertyPathResolver(IValueConverter converter) : base(converter)
-        { }
+        {
+        }
 
         /// <summary>
         /// Get property info from parent type (case insensitive)

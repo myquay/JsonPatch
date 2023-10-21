@@ -1,5 +1,4 @@
 ﻿using JsonPatch.Paths.Resolvers;
-using JsonPatch.Infrastructure;
 
 namespace JsonPatch;
 
@@ -17,7 +16,6 @@ public record JsonPatchOptions
     /// Weather or not to require the Content-Type header to be application/json-patch+json
     /// </summary>
     public bool RequireJsonPatchContentType { get; set; } = true;
-
 }
 
 /// <summary>
@@ -30,4 +28,3 @@ public class JsonPatchSettings
     /// </summary>
     public static JsonPatchOptions Options { get; set; } = new JsonPatchOptions();
 }
-

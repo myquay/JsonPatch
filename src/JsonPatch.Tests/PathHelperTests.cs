@@ -1,18 +1,15 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using JsonPatch.Tests.Entities;
-using System.Collections.Generic;
-using JsonPatch.Paths.Resolvers;
-using JsonPatch.Paths;
-using JsonPatch;
+﻿using JsonPatch.Paths;
 using JsonPatch.Paths.Components;
+using JsonPatch.Paths.Resolvers;
+using JsonPatch.Tests.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace JsonPatch.Tests
 {
     [TestClass]
     public class PathHelperTests
     {
-
         private readonly IPathResolver _resolver = new ExactCasePropertyPathResolver(new JsonValueConverter());
 
         #region ParsePath
