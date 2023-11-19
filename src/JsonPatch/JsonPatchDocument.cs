@@ -1,13 +1,8 @@
-﻿using System;
+﻿using JsonPatch.Formatting;
+using JsonPatch.Paths.Resolvers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using JsonPatch;
-using JsonPatch.Paths;
-using JsonPatch.Paths.Resolvers;
-using JsonPatch.Formatting;
 
 namespace JsonPatch
 {
