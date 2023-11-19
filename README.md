@@ -46,7 +46,7 @@ JsonPatch example:
 
 var jsonPatchSettings = new JsonPatchSettings
 {
-	PathResolver = new ExactCasePropertyPathResolver(new JsonValueConverter())
+    PathResolver = new ExactCasePropertyPathResolver(new JsonValueConverter())
 };
 
 ```
