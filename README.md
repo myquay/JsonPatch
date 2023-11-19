@@ -42,7 +42,13 @@ The path specified in the patch request can be resolved to a different property 
 E.g. the ExactCasePropertyPathResolver will match a property based on an exact match
 
 ```C#
+//JsonPatch
+var jsonPatchSettings = new JsonPatchSettings
+{
+	PathResolver = new ExactCasePropertyPathResolver(new JsonValueConverter())
+};
 
+//JsonPatchCore
 JsonPatchSettings.Options = new JsonPatchOptions
 {
     PathResolver = new ExactCasePropertyPathResolver(new JsonValueConverter()),
