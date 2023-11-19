@@ -62,7 +62,6 @@ JsonPatchSettings.Options = new JsonPatchOptions
 
 ```
 
-
 Now the request 
 
     PATCH /my/data HTTP/1.1
