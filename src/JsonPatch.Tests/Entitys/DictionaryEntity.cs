@@ -4,6 +4,8 @@ namespace JsonPatch.Tests.Entities
 {
 	public class DictionaryEntity<TKey>
 	{
-		public IDictionary<TKey, string> Foo { get; set; }
-	}
+        public Dictionary<TKey, string> Foo { get; set; }
+
+        public IDictionary<TKey, string> Bar { get; set; }
+    }
 }
