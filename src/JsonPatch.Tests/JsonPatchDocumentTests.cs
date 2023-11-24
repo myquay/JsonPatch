@@ -287,6 +287,59 @@ namespace JsonPatch.Tests
             Assert.AreEqual(SampleEnum.FirstEnum, entity.Foo);
         }
 
+        [TestMethod]
+        public void ApplyUpdate_ReplaceOperation_LowercaseEnum()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<EnumEntity>();
+            var entity = new EnumEntity
+            {
+                Foo = SampleEnum.FirstEnum
+            };
+
+            //Act
+            patchDocument.Replace(nameof(EnumEntity.Foo), "secondenum");
+            patchDocument.ApplyUpdatesTo(entity);
+
+            //Assert
+            Assert.AreEqual(entity.Foo, SampleEnum.SecondEnum);
+        }
+
+        [TestMethod]
+        public void ApplyUpdate_ReplaceOperation_LowercaseNullableEnum()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<EnumNullableEntity>();
+            var entity = new EnumNullableEntity
+            {
+                Foo = SampleEnum.FirstEnum
+            };
+
+            //Act
+            patchDocument.Replace(nameof(EnumNullableEntity.Foo), "secondenum");
+            patchDocument.ApplyUpdatesTo(entity);
+
+            //Assert
+            Assert.AreEqual(entity.Foo, SampleEnum.SecondEnum);
+        }
+
+        [TestMethod]
+        public void ApplyUpdate_ReplaceOperation_LowercaseNullableEnum_Null()
+        {
+            //Arrange
+            var patchDocument = new JsonPatchDocument<EnumNullableEntity>();
+            var entity = new EnumNullableEntity
+            {
+                Foo = null
+            };
+
+            //Act
+            patchDocument.Replace(nameof(EnumNullableEntity.Foo), "secondenum");
+            patchDocument.ApplyUpdatesTo(entity);
+
+            //Assert
+            Assert.AreEqual(entity.Foo, SampleEnum.SecondEnum);
+        }
         #endregion
 
         #region Move Operation

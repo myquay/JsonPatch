@@ -21,13 +21,13 @@ namespace JsonPatch
             }
             else if (type.IsEnum)
             {
-                return Enum.Parse(type, value.ToString());
+                return Enum.Parse(type, value.ToString(), true);
             }
             else if (Nullable.GetUnderlyingType(type)?.IsEnum == true)
             {
                 if (value == null)
                     return null;
-                return Enum.Parse(Nullable.GetUnderlyingType(type), value.ToString());
+                return Enum.Parse(Nullable.GetUnderlyingType(type), value.ToString(), true);
             }
             else
             {
