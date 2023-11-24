@@ -59,11 +59,7 @@ namespace JsonPatch.Paths.Components
             get
             {
                 return typeof(IDictionary).IsAssignableFrom(ComponentType) ||
-                    typeof(IDictionary<,>).IsAssignableFrom(ComponentType) || (
-                        ComponentType.IsGenericType && (
-                        typeof(IDictionary).IsAssignableFrom(ComponentType.GetGenericTypeDefinition()) ||
-                        typeof(IDictionary<,>).IsAssignableFrom(ComponentType.GetGenericTypeDefinition())
-                    ));
+                   (ComponentType.IsGenericType && typeof(IDictionary<,>).IsAssignableFrom(ComponentType.GetGenericTypeDefinition()));
             }
         }
     }

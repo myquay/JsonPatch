@@ -726,16 +726,23 @@ namespace JsonPatch.Tests
             //Arrange
             var entity = new DictionaryEntity<string>
             {
-                Foo = new Dictionary<string, string> { { "key1", "Element One" }, { "key2", "Element Two" }, }
+                Foo = new Dictionary<string, string> { { "key1", "Element One" }, { "key2", "Element Two" }, },
+                Bar = new Dictionary<string, string> { { "key1", "Element One" }, { "key2", "Element Two" }, }
             };
 
             //act
             _resolver.SetValueFromPath(typeof(DictionaryEntity<string>), "/Foo/key1", entity, "Element One Updated", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<string>), "/Bar/key1", entity, "Element One Updated", JsonPatchOperationType.replace);
 
             //Assert
             Assert.AreEqual("Element One Updated", entity.Foo["key1"]);
             Assert.AreEqual("Element Two", entity.Foo["key2"]);
             Assert.AreEqual(2, entity.Foo.Count);
+
+            //Assert
+            Assert.AreEqual("Element One Updated", entity.Bar["key1"]);
+            Assert.AreEqual("Element Two", entity.Bar["key2"]);
+            Assert.AreEqual(2, entity.Bar.Count);
         }
 
         [TestMethod]
@@ -744,16 +751,22 @@ namespace JsonPatch.Tests
             //Arrange
             var entity = new DictionaryEntity<int>
             {
-                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
+                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, },
+                Bar = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
             };
 
             //act
             _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Bar/2", entity, "Element Two Updated", JsonPatchOperationType.replace);
 
             //Assert
             Assert.AreEqual("Element Two Updated", entity.Foo[2]);
             Assert.AreEqual("Element One", entity.Foo[1]);
             Assert.AreEqual(2, entity.Foo.Count);
+
+            Assert.AreEqual("Element Two Updated", entity.Bar[2]);
+            Assert.AreEqual("Element One", entity.Bar[1]);
+            Assert.AreEqual(2, entity.Bar.Count);
         }
 
         [TestMethod]
@@ -762,15 +775,20 @@ namespace JsonPatch.Tests
             //Arrange
             var entity = new DictionaryEntity<int>
             {
-                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
+                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, },
+                Bar = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
             };
 
             //act
             _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/3", entity, "Element Three", JsonPatchOperationType.add);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Bar/3", entity, "Element Three", JsonPatchOperationType.add);
 
             //Assert
             Assert.AreEqual("Element Three", entity.Foo[3]);
             Assert.AreEqual(3, entity.Foo.Count);
+
+            Assert.AreEqual("Element Three", entity.Bar[3]);
+            Assert.AreEqual(3, entity.Bar.Count);
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
@@ -792,15 +810,20 @@ namespace JsonPatch.Tests
             //Arrange
             var entity = new DictionaryEntity<int>
             {
-                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
+                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, },
+                Bar = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
             };
 
             //act
             _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/2", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Bar/2", entity, null, JsonPatchOperationType.remove);
 
             //Assert
             Assert.IsFalse(entity.Foo.ContainsKey(2));
             Assert.AreEqual(1, entity.Foo.Count);
+
+            Assert.IsFalse(entity.Bar.ContainsKey(2));
+            Assert.AreEqual(1, entity.Bar.Count);
         }
 
         [TestMethod]
@@ -809,14 +832,17 @@ namespace JsonPatch.Tests
             //Arrange
             var entity = new DictionaryEntity<int>
             {
-                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
+                Foo = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, },
+                Bar = new Dictionary<int, string> { { 1, "Element One" }, { 2, "Element Two" }, }
             };
 
             //act
             _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Foo/5", entity, null, JsonPatchOperationType.remove);
+            _resolver.SetValueFromPath(typeof(DictionaryEntity<int>), "/Bar/5", entity, null, JsonPatchOperationType.remove);
 
             //Assert
             Assert.AreEqual(2, entity.Foo.Count);
+            Assert.AreEqual(2, entity.Bar.Count);
         }
 
         [TestMethod, ExpectedException(typeof(JsonPatchOperationException))]
