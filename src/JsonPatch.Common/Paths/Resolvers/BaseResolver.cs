@@ -24,7 +24,13 @@ namespace JsonPatch.Paths.Resolvers
             this.converter = converter;
         }
 
-        internal abstract PropertyInfo GetProperty(Type parentType, string component);
+        /// <summary>
+        /// Get the property reference for a component
+        /// </summary>
+        /// <param name="parentType"></param>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public abstract PropertyInfo GetProperty(Type parentType, string component);
 
         /// <summary>
         /// Get components of a path
