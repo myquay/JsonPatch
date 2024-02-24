@@ -28,7 +28,7 @@ namespace JsonPatch.Paths.Resolvers
         /// <param name="parentType"></param>
         /// <param name="component"></param>
         /// <returns></returns>
-        internal override PropertyInfo GetProperty(Type parentType, string component)
+        public override PropertyInfo GetProperty(Type parentType, string component)
         {
             var property = (new AttributePropertyPathResolver(converter).GetProperty(parentType, component) ?? 
                 new ExactCasePropertyPathResolver(converter).GetProperty(parentType, component)) ?? 

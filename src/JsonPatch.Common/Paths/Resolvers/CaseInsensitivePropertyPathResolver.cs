@@ -22,7 +22,7 @@ namespace JsonPatch.Paths.Resolvers
         /// <param name="parentType"></param>
         /// <param name="component"></param>
         /// <returns></returns>
-        internal override PropertyInfo GetProperty(Type parentType, string component)
+        public override PropertyInfo GetProperty(Type parentType, string component)
         {
             return parentType.GetProperty(component,
                 BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
