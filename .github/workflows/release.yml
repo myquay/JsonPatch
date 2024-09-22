@@ -50,11 +50,11 @@ jobs:
           copy src\JsonPatch\bin\Release\JsonPatch.Common.pdb \pack\json-patch\lib\net48
           copy src\JsonPatch\bin\Release\JsonPatch.dll \pack\json-patch\lib\net48
           copy src\JsonPatch\bin\Release\JsonPatch.pdb \pack\json-patch\lib\net48
-          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatch.Common.dll \pack\json-patch\lib\net6.0
-          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatch.Common.pdb \pack\json-patch\lib\net6.0
-          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.dll \pack\json-patch\lib\net6.0
-          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.pdb \pack\json-patch\lib\net6.0
-          copy src\JsonPatchCore\bin\Release\net6.0\JsonPatchCore.xml \pack\json-patch\lib\net6.0
+          copy src\JsonPatchCore\bin\Release\net8.0\JsonPatch.Common.dll \pack\json-patch\lib\net8.0
+          copy src\JsonPatchCore\bin\Release\net8.0\JsonPatch.Common.pdb \pack\json-patch\lib\net8.0
+          copy src\JsonPatchCore\bin\Release\net8.0\JsonPatchCore.dll \pack\json-patch\lib\net8.0
+          copy src\JsonPatchCore\bin\Release\net8.0\JsonPatchCore.pdb \pack\json-patch\lib\net8.0
+          copy src\JsonPatchCore\bin\Release\net8.0\JsonPatchCore.xml \pack\json-patch\lib\net8.0
 
     - name: 📦 Pack NuGet package
       run: nuget pack \pack\json-patch\JsonPatch.nuspec -p version=${{github.event.release.tag_name}} -p releasenotes="${{github.event.release.body}}" -p commit=${{github.sha}}
