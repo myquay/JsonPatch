@@ -6,6 +6,10 @@ namespace JsonPatchCore.Tests.Api
 
         public DateTime? Time { get; set; }
 
+        public DateOnly? DateOnly { get; set; }
+
+        public TimeOnly? TimeOnly { get; set; }
+
         public WeatherType? Weather { get; set; }
     }
 
