@@ -24,7 +24,7 @@ namespace JsonPatch.Paths.Resolvers
         /// <param name="parentType"></param>
         /// <param name="component"></param>
         /// <returns></returns>
-        internal override PropertyInfo GetProperty(Type parentType, string component)
+        public override PropertyInfo GetProperty(Type parentType, string component)
         {
             var dataMemberPropertyMatch = parentType.GetProperties().FirstOrDefault(p =>
             {
