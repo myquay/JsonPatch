@@ -38,12 +38,12 @@ jobs:
     - name: 🚀 Build .NET 4.8 JsonPatch.dll
       run: msbuild /p:Configuration=Release /p:IncludeSymbols=true src/JsonPatch/JsonPatch.csproj
 
-    - name: 🚀 Build .NET 6 JsonPatchCore.dll
+    - name: 🚀 Build .NET 8 JsonPatchCore.dll
       run: dotnet build src/JsonPatchCore/JsonPatchCore.csproj --configuration Release
 
     - name: 📄 Copy DLLs and NuSpec to working folder
       run: |
-          mkdir \pack\json-patch\lib\net6.0
+          mkdir \pack\json-patch\lib\net8.0
           mkdir \pack\json-patch\lib\net48
           copy src\JsonPatch.nuspec \pack\json-patch
           copy src\JsonPatch\bin\Release\JsonPatch.Common.dll \pack\json-patch\lib\net48
