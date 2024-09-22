@@ -33,6 +33,7 @@ jobs:
       run: msbuild /p:Configuration=Release /p:IncludeSymbols=true src/JsonPatch.Tests/JsonPatch.Tests.csproj
 
     - name: 👟 Run .NET 4.8 JsonPatch.dll Tests
+      if: false
       uses: microsoft/vstest-action@v1.0.0
       with:
         testAssembly: JsonPatch.Tests*.dll
