@@ -39,7 +39,7 @@ namespace JsonPatch
                     return null;
                 return Enum.Parse(Nullable.GetUnderlyingType(type), value.ToString(), true);
             }
-            else if(type.GetType() == typeof(TimeOnly) || Nullable.GetUnderlyingType(type) == typeof(TimeOnly))
+            else if((type.IsValueType && type.UnderlyingSystemType == typeof(TimeOnly)) || Nullable.GetUnderlyingType(type) == typeof(TimeOnly))
             {
                 return TimeOnly.Parse(value.ToString());
             }

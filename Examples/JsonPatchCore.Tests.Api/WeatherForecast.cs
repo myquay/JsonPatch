@@ -8,7 +8,7 @@ namespace JsonPatchCore.Tests.Api
 
         public DateOnly? DateOnly { get; set; }
 
-        public TimeOnly? TimeOnly { get; set; }
+        public TimeOnly TimeOnly { get; set; }
 
         public WeatherType? Weather { get; set; }
     }
